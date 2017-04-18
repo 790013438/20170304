@@ -7,7 +7,9 @@ public class Exercise {
 	}
 }
 interface IntSequence{
-	boolean hasNext();
+	default boolean hasNext(){
+		return true;
+	}
 	int next();
 	public static double average(IntSequence seq,int n){
 		int count=0;
@@ -35,4 +37,11 @@ class DigitSequence implements IntSequence{
 	public int rest(){
 		return number;
 	}
+}
+//½Ó¿ÚÁ·Ï°
+interface Closeable{
+	void close();
+}
+interface Chnnel extends Closeable{
+	boolean isOpen();
 }
