@@ -6,5 +6,7 @@ public class Exercise {
 		Runnable taskRunnable=() -> {System.out.println("hello");};
 		Executor executor=Executors.newCachedThreadPool();
 		executor.execute(taskRunnable);
+		int processors=Runtime.getRuntime().availableProcessors();
+		System.out.println(processors);
 	}
 }
