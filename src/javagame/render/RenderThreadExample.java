@@ -27,6 +27,9 @@ public class RenderThreadExample extends JFrame implements Runnable{
 	protected void onWindowClosing(){
 		try{			
 			System.out.println("Stopping Thread....");
+			runningVolatileBoolean=false;
+			gameThread.join();
+			System.out.println("Stopped!!!");
 		}catch(Exception e){
 			System.out.println(e);
 		}
