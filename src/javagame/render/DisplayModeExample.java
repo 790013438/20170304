@@ -10,8 +10,11 @@ import java.awt.Graphics2D;
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -54,10 +57,11 @@ public class DisplayModeExample extends JFrame{
         final DisplayModeExample displayModeExample=new DisplayModeExample();
         SwingUtilities.invokeLater(new Runnable(){
             public void run(){
+                displayModeExample.createAndShowGUI();
 //                22
-//                ×Ô¼ºÀàµÄ·½·¨createAndShowGUI´´½¨Í¼ĞÎ½çÃæ
+//               è‡ªå·±ç±»çš„æ–¹æ³•createAndShowGUIåˆ›å»ºå›¾å½¢ç•Œé¢
 //                333
-//                22½ñÌì¼ûÊ¶ÁËĞÂµÄ·ÖÅäÊı×éµÄ·½·¨
+//                22ä»Šå¤©è§è¯†äº†æ–°çš„åˆ†é…æ•°ç»„çš„æ–¹æ³•
 //                ArrayClassExample[] arrayClassExample=new ArrayClassExample[1];
 //                System.out.println(arrayClassExample[0]==null);
 //                System.out.println(arrayClassExample.length);
@@ -65,16 +69,38 @@ public class DisplayModeExample extends JFrame{
             }
         });
     }
-//    22½ñÌì¼ûÊ¶ÁËĞÂµÄ·ÖÅäÊı×éµÄ·½·¨
+//     22ä»Šå¤©è§è¯†äº†æ–°çš„åˆ†é…æ•°ç»„çš„æ–¹æ³•
 //    class ArrayClassExample{
 //    }
 //    33
-//    ´´½¨Í¼ĞÎ½çÃæ²¢ÉèÖÃ
+//    åˆ›å»ºå›¾å½¢ç•Œé¢å¹¶è®¾ç½®
     protected void createAndShowGUI(){
         Container canvasContainer=getContentPane();
-//        22
-//        canvas.add()JPanelÄÚÈİ£¬¸ø´°»§ºıÖ½
-//        33
+//        JPanelå†…å®¹ï¼Œç»™çª—æˆ·ç³Šçº¸
+        canvasContainer.add(getMainPanel());
+        /**
+         * Because the render loop does all the painting for this
+         * application,the setIgnoreRepaint() flag can be set on the JFrame.
+         */
+        canvasContainer.setIgnoreRepaint(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setTitle("Display Mode Test");
+        pack();
+        /**
+         * Causes this Window to be sized to fit the preferred size and layouts
+         * of its subcomponents. The resulting width and height of the window
+         * are automatically enlarged if either of dimensions is less than the
+         * minimum size as specified by the previous call to the
+         * {@code setMinimumSize} method.
+         * <p>
+         * If the window and/or its owner are not displayable yet, both of them
+         * are made displayable before calculating the preferred size. The
+         * Window is validated after its size is being calculated.
+         *
+         * @see Component#isDisplayable
+         * @see #setMinimumSize
+         */
+        setVisible(true);
     }
     /**JPanel a flat or curved component, typically rectangular, 
      * that forms or is set into the surface of a door, wall, or ceiling.
@@ -84,15 +110,31 @@ public class DisplayModeExample extends JFrame{
      */
     private JPanel getMainPanel(){
         JPanel panel=new JPanel();
-//        22
-//        displayModesComboBox=new JComboBox();ÁĞ³ö¶«Î÷
-//        333
+//        åˆ—å‡ºä¸œè¥¿
+        displayModesComboBox=new JComboBox(listDisplayModes());
+        panel.add(displayModesComboBox);
+        JButton enterButton=new JButton("Enter Full Screen");
+        enterButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+//                å…·ä½“å¤„ç†
+                onEnterFullScreen();
+            }
+        });
+        panel.add(enterButton);
+        JButton exitButton = new JButton("Exit Full Screen");
+        exitButton.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e){
+//                å…·ä½“å¤„ç†
+                onExitFullScreen();
+            }
+        });
+        panel.add(exitButton);
         return panel;
     }
     /**
      * The listDisplayModes() method 
      * returns a list of display modes in the wrapper class discussed previously.
-     * @author Floyd
+     * @author 790013438
      */
     private DisplayModeWrapper[] listDisplayModes(){
         ArrayList<DisplayModeWrapper>displayModeWrapperArrayList=new ArrayList<DisplayModeWrapper>();
@@ -135,6 +177,49 @@ public class DisplayModeExample extends JFrame{
         public String toString(){
             return ""+displayMode.getWidth()+" x "+displayMode.getHeight();
         }
+    }
+    /**
+     * The onEnterFullScreen() method first checks to make sure full screen is supported,
+     * switches to full screen ,and then changes the display mode.The getSelectedMode() 
+     * method actually creates create a new DisplayMode with an unknown refresh rate so 
+     * the default refresh rate is used.
+     */
+    protected void onEnterFullScreen(){
+        if(graphicsDevice.isFullScreenSupported()){
+//           è‡ªå·±å†™çš„method
+            DisplayMode newMode=getSelectedMode();
+            graphicsDevice.setFullScreenWindow(this);
+            graphicsDevice.setDisplayMode(newMode);
+        }
+    }
+    /**
+     * The getSelectedMode() 
+     * method actually creates a new DisplayMode width an unknown refresh rate so the default 
+     * refresh rate is used.
+     * since the program creates the display mode as 32 bits and ignores all others,the 16 bit 
+     * modes are not avilable.To let the software decide which refresh rate to use,the 
+     * REFRESH_RATE_UNKNOWN value is used.This way,only one display mode of 640 x 480 is 
+     * used and the others are skipped. 
+     * @return
+     */
+    protected DisplayMode getSelectedMode(){
+        DisplayModeWrapper wrapper=(DisplayModeWrapper)displayModesComboBox.getSelectedItem();
+        DisplayMode displayMode=wrapper.displayMode;
+        int width=displayMode.getWidth();
+        int height=displayMode.getHeight();
+        int bitDepth=displayMode.getBitDepth();
+        int refreshRate=DisplayMode.REFRESH_RATE_UNKNOWN;
+        return new DisplayMode(width,height,bitDepth,refreshRate);
+    }
+    protected void onExitFullScreen(){
+//        22
+        try{
+            graphicsDevice.setDisplayMode(currentDisplayMode);
+            graphicsDevice.setFullScreenWindow(null);
+        }catch(Exception e){
+            System.out.println(e);
+        }
+//        333
     }
 
 }
