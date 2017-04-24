@@ -62,7 +62,8 @@ public class SimpleKeyboardInput implements KeyListener{
      * the arrow keys,do not generate a keyTyped() event.this event will be explored in 
      * Chapter 11,which covers text. 
      */
-    public synchronized void keyTyped(KeyEvent e){        
+    public synchronized void keyTyped(KeyEvent e){
+//        Not needed
     }
 
 }
