@@ -1,11 +1,11 @@
 package javagame.util;
 
-import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
-public class KeyboardInput implements KeyListener{
+public class KeyboardInput implements KeyListener{ 
     
-    private boolean[] keysBoolean;
+    private boolean[] keysBooleanArray;
     /**
      * To update the KeyboardInput class to keep track of initial key presses as well as the keyboard 
      * state,an array of integer values is added,These values will keep track of how 
@@ -16,9 +16,10 @@ public class KeyboardInput implements KeyListener{
     private int[] polledInt;
     
     public KeyboardInput(){
-        keysBoolean=new boolean[256];
+        keysBooleanArray=new boolean[256];
         polledInt=new int[256];
     }
+    
     /**
      * If the input was handled outside of the game loop,the state could change at any time.
      * Also,multiple keys may be down simultaneously,so handling each event by itself 
@@ -29,11 +30,11 @@ public class KeyboardInput implements KeyListener{
      * @param keyCodeInt
      * @return
      */
-    public boolean keyDown(int keyCodeInt){
-        return polledInt[keyCodeInt]>0;
+    public  boolean keyDown(int keyInt){
+        return polledInt[keyInt]>0;
     }
-    public boolean keyDownOnce(int keyCode){
-        return polledInt[keyCode]==1;
+    public boolean keyDownOnce(int keyInt){
+        return polledInt[keyInt]==1;
     }
     /**
      * The poll() method,synchronized to protected the shared keys array,transfers the keyboard 
@@ -42,8 +43,8 @@ public class KeyboardInput implements KeyListener{
      * zero and a new method,keyDownOnce(),returns true when the value is exactly one.
      */
     public synchronized void poll(){
-        for(int i=0;i<keysBoolean.length;++i){
-            if(keysBoolean[i]){
+        for(int i=0;i<keysBooleanArray.length;++i){
+            if(keysBooleanArray[i]){
                 polledInt[i]++;
             }else{
                 polledInt[i]=0;
@@ -54,18 +55,18 @@ public class KeyboardInput implements KeyListener{
      * When a key is pressed,the keyPressed() method is called.
      */
     public synchronized void keyPressed(KeyEvent e){
-        int keyCode=e.getKeyCode();
-        if(keyCode>=0&&keyCode<keysBoolean.length){
-            keysBoolean[keyCode]=true;
+        int keyCodeInt=e.getKeyCode();
+        if(keyCodeInt>=0&&keyCodeInt<keysBooleanArray.length){
+            keysBooleanArray[keyCodeInt]=true;
         }
     }
     /**
      * As expected,the keyReleased() method is called when the same key is released.
      */
     public synchronized void keyReleased(KeyEvent e){
-        int keyCode=e.getKeyCode();
-        if(keyCode>=0&&keyCode<keysBoolean.length){
-            keysBoolean[keyCode]=false;
+        int keyCodeInt=e.getKeyCode();
+        if(keyCodeInt>=0&&keyCodeInt<keysBooleanArray.length){
+            keysBooleanArray[keyCodeInt]=false;
         }
     }
     /**
@@ -74,8 +75,7 @@ public class KeyboardInput implements KeyListener{
      * the arrow keys,do not generate a keyTyped() event.this event will be explored in 
      * Chapter 11,which covers text. 
      */
-    public synchronized void keyTyped(KeyEvent e){
+    public void keyTyped(KeyEvent e){        
 //        not needed
     }
-
 }
