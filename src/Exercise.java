@@ -8,5 +8,6 @@ public class Exercise {
 		executor.execute(taskRunnable);
 		int processors=Runtime.getRuntime().availableProcessors();
 		System.out.println(processors);
+		System.out.println("asdf"+-5%2);
 	}
 }

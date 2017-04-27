@@ -305,6 +305,11 @@ public class SimpleMouseExample extends JFrame implements Runnable{
         }while(bufferStrategy.contentsLost());
     }
     private void render(Graphics g){
+        /**
+         * The % operator will keep the value between (–3, 3). 
+         * Because the modulus operation of a negative value is either zero or a negative value, 
+         * the absolute value is used to keep the array index between (0, size –1).
+         */
         colorIndex+=simpleMouseInputBoolean.getNotches();
         Color color=COLORSArray[Math.abs(colorIndex%COLORSArray.length)];
         g.setColor(color);
@@ -314,6 +319,10 @@ public class SimpleMouseExample extends JFrame implements Runnable{
         g.drawString("Press C to clear lines", 30, 60);
         g.drawString("Mouse Wheel cycles colors", 30, 75);
         g.drawString(simpleMouseInputBoolean.getPosition().toString(), 30, 90);
+        /**
+         * Finally, the lines are drawn. Because null values are inserted into the data structure, 
+         * code is added to make sure lines are drawn only if neither point is null.
+         */
         for(int i=0;i<pointArrayList.size()-1;++i){
             Point p1=pointArrayList.get(i);
             Point p2=pointArrayList.get(i+1);
