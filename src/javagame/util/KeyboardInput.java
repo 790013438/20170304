@@ -60,11 +60,11 @@ public class KeyboardInput implements KeyListener {
      * @return
      */
     public boolean keyDown(int keyInt){
-        return polledInt[keyInt] == 1;
+        return polledInt[keyInt] > 0;
     }
     
     public boolean keyDownOnce(int keyInt){
-        return polledInt[keyInt] > 0;
+        return polledInt[keyInt] == 1;
     }
     /**
      * The poll() method,synchronized to protected the shared keys array,transfers the keyboard 

@@ -60,6 +60,10 @@ public class RelativeMouseInput implements MouseListener, MouseMotionListener, M
      * @since 1.3
      */
     private Robot robot;
+    private int notchesInt;
+    private Point mousePosPoint;
+    private int polledNotchesInt;
+    private int[] polledInt;
 
     public RelativeMouseInput(Component component) {
         mouseBooleanArray = new boolean[BUTTON_COUNT];
@@ -74,6 +78,8 @@ public class RelativeMouseInput implements MouseListener, MouseMotionListener, M
             System.out.println(e);
         }
         currentPosPoint = new Point( 0 , 0);
+        mousePosPoint = new Point(0,0);
+        polledInt = new int[BUTTON_COUNT];
     }
 
     public synchronized void mousePressed(MouseEvent e) {
@@ -95,9 +101,7 @@ public class RelativeMouseInput implements MouseListener, MouseMotionListener, M
     }
 
     public synchronized void mouseEntered(MouseEvent e) {
-        // 2
-        // mouseMoved(e);
-        // 33
+         mouseMoved(e);
     }
 
     public synchronized void mouseExited(MouseEvent e) {
@@ -124,23 +128,18 @@ public class RelativeMouseInput implements MouseListener, MouseMotionListener, M
             Point center = getComponentCenter();
             dxInt += p.x - center.x;
             dyInt += p.y - center.y;
-            // 2
-            // centerMouse();
-            // 33
+            centerMouse();
         } else {
             currentPosPoint = e.getPoint();
         }
     }
 
     public synchronized void mouseDragged(MouseEvent e) {
-        // 2
-        // mouseMoved(e);
-        // 33
+         mouseMoved(e);
     }
 
     public synchronized void mouseWheelMoved(MouseWheelEvent e) {
-        // 2
-        // 33
+        notchesInt += e.getWheelRotation();
     }
 
     public boolean isRelative() {
@@ -174,5 +173,48 @@ public class RelativeMouseInput implements MouseListener, MouseMotionListener, M
              SwingUtilities.convertPointToScreen( centerPoint ,component );
              robot.mouseMove(centerPoint.x, centerPoint.y);
          }
+    }
+    
+    public synchronized void poll(){
+        if(isRelative()){
+            mousePosPoint = new Point(dxInt,dyInt);
+        } else {
+            mousePosPoint = new Point(currentPosPoint);
+        }
+        dxInt = dyInt = 0;
+        
+        polledNotchesInt = notchesInt;
+        notchesInt = 0;
+        
+        for( int i = 0; i < mouseBooleanArray.length ; ++i ){
+            if( mouseBooleanArray[i] ){
+                polledInt[i]++;
+            } else {
+                polledInt[i] = 0;
+            }
+        }
+    }
+    
+    public int getNotches(){
+        return polledNotchesInt;
+    }
+    
+    public boolean buttonDwon( int button ){
+        return polledInt[button-1] > 0;
+    }
+    
+    public boolean buttonDownOnce( int button ){
+        return polledInt[button - 1] == 1;
+    }
+    
+    public Point getPosition() {   
+        return mousePosPoint;
+    }
+    
+    public void setRelative(boolean relativeBoolean) {
+        this.relativeBoolean = relativeBoolean;
+        if(relativeBoolean){
+            centerMouse();
+        }
     }
 }
