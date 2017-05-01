@@ -5,9 +5,8 @@ import java.awt.event.KeyListener;
 /*
  * 为熟悉结构重写
  */
-public class KeyboardInput implements KeyListener {
+public class KeyboardInput implements KeyListener{
     
-    private boolean[] keysBooleanArray;
     /**
      * It is difficult to test when a key is prssed for the first time.
      * If 20 keys need to be tracked,and some of those change behavior based on the game state,
@@ -21,6 +20,9 @@ public class KeyboardInput implements KeyListener {
      * } else {
      *     space = false;
      * }
+     */
+    private boolean[] keysBooleanArray;
+    /**
      * To update the KeyboardInput class to keep track of initial key presses as well as the keyboard 
      * state,an array of integer values is added,These values will keep track of how 
      * many frames the key has been pressed.The code implementing the keyListener interface 
@@ -33,22 +35,6 @@ public class KeyboardInput implements KeyListener {
         keysBooleanArray = new boolean[256];
         polledInt = new int[256];
     }
-    
-    public synchronized void keyPressed(KeyEvent e){   
-        int keyCodeInt = e.getKeyCode();
-        if(keyCodeInt >= 0 && keyCodeInt <= keysBooleanArray.length ){
-            keysBooleanArray[keyCodeInt] = true;
-        }
-    }
-    public synchronized void keyReleased(KeyEvent e){  
-        int keyCodeInt = e.getKeyCode();
-        if(keyCodeInt >= 0 && keyCodeInt <= keysBooleanArray.length ){
-            keysBooleanArray[keyCodeInt] = false;
-        }
-    }
-    public void keyTyped(KeyEvent e){
-//        Not needed
-    }
     /**
      * If the input was handled outside of the game loop,the state could change at any time.
      * Also,multiple keys may be down simultaneously,so handling each event by itself 
@@ -59,12 +45,22 @@ public class KeyboardInput implements KeyListener {
      * @param keyCodeInt
      * @return
      */
-    public boolean keyDown(int keyInt){
-        return polledInt[keyInt] > 0;
+    public synchronized void keyPressed(KeyEvent e) { 
+        int keyCodeInt = e.getKeyCode();
+        if( keyCodeInt >= 0 && keyCodeInt <= keysBooleanArray.length ){
+            keysBooleanArray[keyCodeInt] = true;
+        }
     }
     
-    public boolean keyDownOnce(int keyInt){
-        return polledInt[keyInt] == 1;
+    public synchronized void keyReleased(KeyEvent e) {
+        int keyCodeInt = e.getKeyCode();
+        if(keyCodeInt >= 0 && keyCodeInt <= keysBooleanArray.length ){
+            keysBooleanArray[keyCodeInt] = false;
+        }
+    }
+    
+    public void keyTyped(KeyEvent e) {        
+//        Not needed
     }
     /**
      * The poll() method,synchronized to protected the shared keys array,transfers the keyboard 
@@ -73,12 +69,21 @@ public class KeyboardInput implements KeyListener {
      * zero and a new method,keyDownOnce(),returns true when the value is exactly one.
      */
     public synchronized void poll(){
-        for(int i = 0;i < keysBooleanArray.length;++i){
-            if(keysBooleanArray[i]){
+        for( int i = 0; i < keysBooleanArray.length; ++i ){
+            if( keysBooleanArray[i] ){
                 polledInt[i]++;
             } else {
                 polledInt[i] = 0;
             }
         }
     }
+    
+    public boolean keyDown(int keyCodeInt) {
+        return polledInt[keyCodeInt] > 0;
+    }
+    
+    public boolean keyDownOnce(int keyCodeInt) {
+        return polledInt[keyCodeInt] == 1;
+    }
+    
 }

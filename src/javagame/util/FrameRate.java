@@ -11,7 +11,7 @@ package javagame.util;
  * @author 79001
  *
  */
-public class FrameRate{
+public class FrameRate {
     
     private long lastTimeLong;
     /**
@@ -23,7 +23,7 @@ public class FrameRate{
     private int frameCountInt;
     private String frameRateString;
     
-    public void initialize(){
+    public void initialize() {
         lastTimeLong = System.currentTimeMillis();
         frameRateString = "FPS 0";
     }
@@ -37,7 +37,7 @@ public class FrameRate{
      * 1000 milliseconds are subtracted from the delta variable to save the extra milliseconds.
      * Once the new frame rate is saved,the frame count is reset and the process begins again.
      */
-    public void calculate(){    
+    public void calculate() {
         /**
          * The System.currentTimeMillis() call returns the number of milliseconds since midnight,January 1,1970.
          * Depending on the operating system,the accuracy of the time measured can vary.
@@ -46,15 +46,17 @@ public class FrameRate{
         long currentLong = System.currentTimeMillis();
         deltaLong += currentLong - lastTimeLong;
         lastTimeLong = currentLong;
+//        2
         frameCountInt++;
-        if(deltaLong > 1000){
+//        233
+        if(deltaLong > 1000) {
             deltaLong -= 1000;
             frameRateString = String.format("FPS %s", frameCountInt);
             frameCountInt = 0;
         }
     }
     
-    public String getFrameRate(){
+    public String getFrameRate() {
         return frameRateString;
     }
     
