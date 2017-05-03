@@ -29,13 +29,14 @@ public class RelativeMouseInput implements MouseListener, MouseMotionListener, M
     
     private boolean[] mouseBooleanArray;
     private static final int BUTTON_COUNT = 3;
-    private boolean relativeBoolean;
     private Point currentPosPoint;
     private int notchesInt;
     private Point mousePosPoint;
-    private int dxInt, dyInt;
     private int polledNotchesInt;
+    private int dxInt, dyInt;
     private int[] polledInt;
+    private boolean relativeBoolean;
+    private Component component;
     /**
      * This class is used to generate native system input events for the
      * purposes of test automation, self-running demos, and other applications
@@ -55,13 +56,13 @@ public class RelativeMouseInput implements MouseListener, MouseMotionListener, M
      * @since 1.3
      */
     private Robot robot;
-    private Component component;
     
     public RelativeMouseInput(Component component) {
         mouseBooleanArray = new boolean[BUTTON_COUNT];
-        currentPosPoint = new Point(0, 0);
-        mousePosPoint = new Point(0, 0);
+        currentPosPoint = new Point(0,0);
+        mousePosPoint = new Point(0,0);
         polledInt = new int[BUTTON_COUNT];
+        this.component = component;
         /**
          * To acomplish this,
          * the Robot class is used to keep the mouse in the center of the window.
@@ -76,12 +77,10 @@ public class RelativeMouseInput implements MouseListener, MouseMotionListener, M
          */
         try {
             robot = new Robot();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
-        this.component = component;
     }
-    
     /**
      * If the input was handled outside of the game loop,the state could change at any time.
      * Also,multiple keys may be down simultaneously,so handling each event by itself 
@@ -92,22 +91,21 @@ public class RelativeMouseInput implements MouseListener, MouseMotionListener, M
      * @param keyCodeInt
      * @return
      */
-    
     public synchronized void mousePressed(MouseEvent e) {
         int buttonInt = e.getButton() - 1;
-        if( buttonInt >= 0 && buttonInt <= mouseBooleanArray.length ) {
+        if( buttonInt >= 0 && buttonInt < mouseBooleanArray.length ) {
             mouseBooleanArray[buttonInt] = true;
         }
     }
     
-    public synchronized void mouseReleased(MouseEvent e) {   
+    public synchronized void mouseReleased(MouseEvent e) {
         int buttonInt = e.getButton() - 1;
-        if( buttonInt >= 0 && buttonInt <= mouseBooleanArray.length ) {
+        if(buttonInt >= 0 && buttonInt < mouseBooleanArray.length ) {
             mouseBooleanArray[buttonInt] = false;
         }
     }
     
-    public void mouseClicked(MouseEvent e) { 
+    public void mouseClicked(MouseEvent e) {
 //        Not needed
     }
     
@@ -124,13 +122,13 @@ public class RelativeMouseInput implements MouseListener, MouseMotionListener, M
     }
     
     public synchronized void mouseMoved(MouseEvent e) {
-        if( isRelative() ){
-           Point p = e.getPoint();
-//           类的方法
-           Point center = getComponentCenter();
-           dxInt += p.x - center.x;
-           dyInt += p.y - center.y;
-           centerMouse();
+        if( isRelative() ) {
+            Point p = e.getPoint();
+//          类的方法
+            Point center = getComponentCenter();
+            dxInt += p.x - center.x;
+            dyInt += p.y - center.y;
+            centerMouse();
         } else {
             currentPosPoint = e.getPoint();
         }
@@ -140,60 +138,13 @@ public class RelativeMouseInput implements MouseListener, MouseMotionListener, M
         notchesInt += e.getWheelRotation();
     }
     
-    public boolean isRelative() {
-        return relativeBoolean;
-    }
-    
-    public void setRelative(boolean relativeBoolean) {
-        this.relativeBoolean = relativeBoolean;
-        if( relativeBoolean ) {
-            centerMouse();
-        }
-    }
-    
-    /**
-     * If in relative mode,the distance is computed as the difference 
-     * from the center and then the mouse cursor is re-centered.
-     * Because the mouse coordiantes and component corrdiantes are both relative values,
-     * there is no need to convert these values.
-     * IIt is important to realize that re-centering the mouse works because when the mouse's 
-     * new positiion and the current position are the same,asking the Robot class to reposition 
-     * the mouse to the same location does not generate new mouse events.
-     * If this behavior ever changes,the relative mouse class will always generate mouse events,
-     * even when the mouse isn't moving.
-     * Checking if the current and new positions are different before 
-     * requesting a re-center would solve this problem if the mouse behavior ever chnges in the future. 
-     */
-    public void centerMouse() {
-        if( robot != null && component.isShowing() ) {
-//            自己人（类里）的方法
-            Point centerPoint = getComponentCenter();
-            /**
-             * Althought it makes drawing easier by using relative pixel values,
-             * positioning the mouse to the relative center of the window does
-             * not take in ot account the lacation of the window and could place
-             * the mouse cursor so far away from the window that is would stop
-             * receivving mousee events.
-             * Converting to screen cooordinates using the SwingUilities class solves this problem.
-             */
-            SwingUtilities.convertPointToScreen(centerPoint, component);
-            robot.mouseMove(centerPoint.x, centerPoint.y);
-        }
-    }
-    
-    public Point getComponentCenter() {
-        int w = component.getWidth();
-        int h = component.getHeight();
-        return new Point(w / 2, h / 2);
-    }
-    
     /**
      * Finally,during the poll method,the mouse position can be either rlative or absolute.
      * The delta variables are reset indide the poll method along with all the other variables.
      */
     public synchronized void poll() {
-        if(isRelative()) {
-            mousePosPoint = new Point(dxInt, dxInt);
+        if( isRelative() ) {
+            mousePosPoint = new Point(dxInt, dyInt);
         } else {
             mousePosPoint = new Point(currentPosPoint);
         }
@@ -202,13 +153,14 @@ public class RelativeMouseInput implements MouseListener, MouseMotionListener, M
         polledNotchesInt = notchesInt;
         notchesInt = 0;
         
-        for( int i = 0; i < mouseBooleanArray.length; ++i) {
+        for(int i = 0; i < mouseBooleanArray.length; ++i) {
             if( mouseBooleanArray[i] ) {
                 polledInt[i]++;
             } else {
                 polledInt[i] = 0;
             }
         }
+        
     }
     
     public boolean buttonDown(int button) {
@@ -225,6 +177,52 @@ public class RelativeMouseInput implements MouseListener, MouseMotionListener, M
     
     public Point getPosition() {
         return mousePosPoint;
+    }
+    
+    public boolean isRelative() {
+        return relativeBoolean;
+    }
+    
+    public void setRelative(boolean relativeBoolean) {
+        this.relativeBoolean = relativeBoolean;
+        if(relativeBoolean) {
+            centerMouse();
+        }
+    }
+    /**
+     * If in relative mode,the distance is computed as the difference 
+     * from the center and then the mouse cursor is re-centered.
+     * Because the mouse coordiantes and component corrdiantes are both relative values,
+     * there is no need to convert these values.
+     * IIt is important to realize that re-centering the mouse works because when the mouse's 
+     * new positiion and the current position are the same,asking the Robot class to reposition 
+     * the mouse to the same location does not generate new mouse events.
+     * If this behavior ever changes,the relative mouse class will always generate mouse events,
+     * even when the mouse isn't moving.
+     * Checking if the current and new positions are different before 
+     * requesting a re-center would solve this problem if the mouse behavior ever chnges in the future. 
+     */
+    public void centerMouse() {
+        if( robot != null && component.isShowing() ) {
+//          自己人（类里）的方法
+            Point centerPoint = getComponentCenter();
+            /**
+             * Althought it makes drawing easier by using relative pixel values,
+             * positioning the mouse to the relative center of the window does
+             * not take in ot account the lacation of the window and could place
+             * the mouse cursor so far away from the window that is would stop
+             * receivving mousee events.
+             * Converting to screen cooordinates using the SwingUilities class solves this problem.
+             */
+            SwingUtilities.convertPointToScreen(centerPoint, component);
+            robot.mouseMove(centerPoint.x,centerPoint.y);
+        }
+    }
+    
+    public Point getComponentCenter() {
+        int w = component.getWidth();
+        int h = component.getHeight();
+        return new Point(w / 2,h / 2);
     }
     
 }

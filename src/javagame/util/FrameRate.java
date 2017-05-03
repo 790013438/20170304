@@ -13,18 +13,18 @@ package javagame.util;
  */
 public class FrameRate {
     
-    private long lastTimeLong;
     /**
      * the fourth letter of the Greek alphabet
      * Since the delta variables is rarely exactly one second,
      * 1000 milliseconds are subtracted from the delta variable to save the extra milliseconds.
      */
     private long deltaLong;
+    private long lastLong;
     private int frameCountInt;
     private String frameRateString;
     
     public void initialize() {
-        lastTimeLong = System.currentTimeMillis();
+        lastLong = System.currentTimeMillis();
         frameRateString = "FPS 0";
     }
     
@@ -44,12 +44,10 @@ public class FrameRate {
          * Some versions of Windows,for example,guarantee only 10 milliseconds of accuracy.
          */
         long currentLong = System.currentTimeMillis();
-        deltaLong += currentLong - lastTimeLong;
-        lastTimeLong = currentLong;
-//        2
+        deltaLong += currentLong - lastLong;
+        lastLong = currentLong;
         frameCountInt++;
-//        233
-        if(deltaLong > 1000) {
+        if( deltaLong > 1000 ) {
             deltaLong -= 1000;
             frameRateString = String.format("FPS %s", frameCountInt);
             frameCountInt = 0;

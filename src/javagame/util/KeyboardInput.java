@@ -22,18 +22,11 @@ public class KeyboardInput implements KeyListener{
      * }
      */
     private boolean[] keysBooleanArray;
-    /**
-     * To update the KeyboardInput class to keep track of initial key presses as well as the keyboard 
-     * state,an array of integer values is added,These values will keep track of how 
-     * many frames the key has been pressed.The code implementing the keyListener interface 
-     * doesn't change at all,but the keyDown() method no longer pulls the value from the 
-     * boolean keysBoolean array. 
-     */
-    private int[] polledInt;
+    private int[] polledIntArray;
     
-    public KeyboardInput(){
+    public KeyboardInput() {
         keysBooleanArray = new boolean[256];
-        polledInt = new int[256];
+        polledIntArray = new int[256];
     }
     /**
      * If the input was handled outside of the game loop,the state could change at any time.
@@ -45,21 +38,21 @@ public class KeyboardInput implements KeyListener{
      * @param keyCodeInt
      * @return
      */
-    public synchronized void keyPressed(KeyEvent e) { 
+    public synchronized void keyPressed(KeyEvent e) {
         int keyCodeInt = e.getKeyCode();
-        if( keyCodeInt >= 0 && keyCodeInt <= keysBooleanArray.length ){
+        if(keyCodeInt >= 0 && keyCodeInt <= keysBooleanArray.length ) {
             keysBooleanArray[keyCodeInt] = true;
         }
     }
     
     public synchronized void keyReleased(KeyEvent e) {
         int keyCodeInt = e.getKeyCode();
-        if(keyCodeInt >= 0 && keyCodeInt <= keysBooleanArray.length ){
+        if(keyCodeInt >= 0 && keyCodeInt <= keysBooleanArray.length ) {
             keysBooleanArray[keyCodeInt] = false;
         }
     }
     
-    public void keyTyped(KeyEvent e) {        
+    public void keyTyped(KeyEvent e) {
 //        Not needed
     }
     /**
@@ -68,22 +61,22 @@ public class KeyboardInput implements KeyListener{
      * otherwise it is set back to zero.The keyDown() method now checks if the value is not 
      * zero and a new method,keyDownOnce(),returns true when the value is exactly one.
      */
-    public synchronized void poll(){
-        for( int i = 0; i < keysBooleanArray.length; ++i ){
-            if( keysBooleanArray[i] ){
-                polledInt[i]++;
+    public synchronized void poll() {
+        for( int i = 0; i < keysBooleanArray.length; ++i) {
+            if(keysBooleanArray[i]) {
+                polledIntArray[i]++;
             } else {
-                polledInt[i] = 0;
+                polledIntArray[i] = 0;
             }
         }
     }
     
     public boolean keyDown(int keyCodeInt) {
-        return polledInt[keyCodeInt] > 0;
+        return polledIntArray[keyCodeInt] > 0;
     }
     
     public boolean keyDownOnce(int keyCodeInt) {
-        return polledInt[keyCodeInt] == 1;
+        return polledIntArray[keyCodeInt] == 1;
     }
     
 }

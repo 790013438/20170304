@@ -2,16 +2,41 @@ package javagame.transform;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferStrategy;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-public class MatrixMultiplyExample extends JFrame{
+import javagame.util.KeyboardInput;
+import javagame.util.RelativeMouseInput;
+import javagame.util.Vector2f;
+import javagame.util.FrameRate;
+import javagame.util.Matrix3x3f;
+
+public class MatrixMultiplyExample extends JFrame implements Runnable{
     
     private static final int SCREEN_W = 640;
     private static final int SCREEN_H = 480;
+    private KeyboardInput keyboardInputBoolean;
+    private RelativeMouseInput relativeMouseInputBoolean;
+    private BufferStrategy bufferStrategy;
+    private Thread gameThread;
+    private volatile boolean runningVolatileBoolean;
+    private FrameRate frameRate;
+    private float earthRot, earthDelta;
+    private float moonRot,moonDelta;
+    private boolean showStars;
+    private int[] stars;
+    private Random rand = new Random();
+    
+    public MatrixMultiplyExample() {
+        
+    }
 
     public static void main(String[]args) {
         final MatrixMultiplyExample matrixMultipleExample = new MatrixMultiplyExample();
@@ -19,7 +44,7 @@ public class MatrixMultiplyExample extends JFrame{
             public void windowClosing(WindowEvent e) {  
 //                2
 //          processing exit
-//                matrix3x3f.onWindowShutDonw();
+                matrixMultipleExample.onWindowShutDown();
 //                233
             }
         });
@@ -27,7 +52,7 @@ public class MatrixMultiplyExample extends JFrame{
             public void run() {
 //                2
 //              Create graphics
-//                matrix3x3f.createAndShowGUI();
+                matrixMultipleExample.createAndShowGUI();
 //                233
             }
         });
@@ -62,8 +87,8 @@ public class MatrixMultiplyExample extends JFrame{
          * it is usually because the programmer forgot to call System.exit().
          */
         try {
-//            2
-//            233
+            runningVolatileBoolean = false;
+            gameThread.join();
         } catch(Exception e) {
             System.out.println(e);
         }
@@ -100,6 +125,131 @@ public class MatrixMultiplyExample extends JFrame{
          * size is being calculated.
          */
         pack();
+//        Add key listeners
+        keyboardInputBoolean = new KeyboardInput();
+        canvas.addKeyListener(keyboardInputBoolean);
+//        Add mouse listener
+//        For full screen : mouse = new RelativeMouseInput( this );
+        relativeMouseInputBoolean = new RelativeMouseInput(canvas);
+        canvas.addMouseListener(relativeMouseInputBoolean);
+        canvas.addMouseMotionListener(relativeMouseInputBoolean);
+        canvas.addMouseWheelListener(relativeMouseInputBoolean);
+        setVisible(true);
+        canvas.createBufferStrategy(2);
+        bufferStrategy = canvas.getBufferStrategy();
+        canvas.requestFocus();
+        gameThread = new Thread(this);
+        gameThread.start();
+    }
+    
+    public void run() {
+        runningVolatileBoolean = true;
+        initialize();
+        while( runningVolatileBoolean ) {
+//        2
+            gameLoop();
+//            233
+        }
+    }
+    
+    private void initialize() {
+        frameRate = new FrameRate();
+        frameRate.initialize();
+        earthDelta = (float)Math.toRadians(0.5);
+        moonDelta = (float)Math.toRadians(2.5);
+        showStars = true;
+        stars = new int[1000];
+        for(int i=0; i < stars.length - 1; i += 2) {
+            stars[i] = rand.nextInt(SCREEN_W);
+            stars[i + 1] = rand.nextInt(SCREEN_H);
+            
+        }
+    }
+    
+    private void gameLoop() {
+        processInput();
+//        2
+        renderFrame();
+//        233
+        sleep(10L);
+    }
+    
+    private void processInput() {
+//        2
+        keyboardInputBoolean.poll();
+        relativeMouseInputBoolean.poll();
+        if(keyboardInputBoolean.keyDownOnce(KeyEvent.VK_SPACE)) {
+            showStars = !showStars;
+        }
+//        233
+    }
+    
+    private void renderFrame() {
+        do {
+            do {
+                Graphics g = null;
+                try{
+                    g = bufferStrategy.getDrawGraphics();
+                    g.clearRect(0, 0, getWidth(), getHeight());
+//                    2
+                    render(g);
+//                    233
+                } catch (Exception e){
+                    System.out.println(e);
+                } finally {
+                    if( g != null) {
+                        g.dispose();
+                    }
+                }
+            }while(bufferStrategy.contentsRestored());
+            bufferStrategy.show();
+        }while(bufferStrategy.contentsLost());
+    }
+    
+    private void sleep(long sleep) {
+        try {
+            Thread.sleep(sleep);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+    
+    private void render(Graphics g) {
+        g.setColor(Color.GREEN);
+        frameRate.calculate();
+        g.drawString(frameRate.getFrameRate(), 20, 20);
+        g.drawString("Press [SPACE] to toggle stars", 20, 35);
+        if(showStars) {
+            g.setColor(Color.WHITE);
+            for(int i = 0; i < stars.length - 1; i +=2 ) {
+                g.fillRect(stars[i], stars[i + 1], 1, 1);
+            }
+        }
+//        draw the sum...
+        Matrix3x3f sunMat = Matrix3x3f.identity();
+        sunMat = sunMat.mul(Matrix3x3f.translate(SCREEN_W / 2, SCREEN_H / 2));
+        Vector2f sun = sunMat.mul(new Vector2f() );
+        g.setColor(Color.YELLOW);
+        g.fillOval((int)sun.x - 50, (int)sun.y - 50, 100, 100);
+//        draw Earth's Orbit
+        g.setColor(Color.WHITE);
+        g.drawOval((int)sun.x - SCREEN_W / 4, (int)sun.y - SCREEN_W / 4, SCREEN_W / 2, SCREEN_W / 2);
+//        draw the Earth
+        Matrix3x3f earthMat = Matrix3x3f.translate(SCREEN_W / 4,0);
+        earthMat = earthMat.mul(Matrix3x3f.rotate(earthRot));
+        earthMat = earthMat.mul(sunMat);
+        earthRot += earthDelta;
+        Vector2f earth = earthMat.mul(new Vector2f());
+        g.setColor(Color.BLUE);
+        g.fillOval((int)earth.x - 10, (int)earth.y - 10, 20, 20);
+//        draw the Moom
+        Matrix3x3f moonMat = Matrix3x3f.translate(30, 0);
+        moonMat = moonMat.mul(Matrix3x3f.rotate(moonRot));
+        moonMat = moonMat.mul(earthMat);
+        moonRot += moonDelta;
+        Vector2f moon = moonMat.mul(new Vector2f());
+        g.setColor(Color.LIGHT_GRAY);
+        g.fillOval((int)moon.x - 5, (int)moon.y - 5, 10, 10);
     }
     
 }
