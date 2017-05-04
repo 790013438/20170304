@@ -31,7 +31,7 @@ public class VectorGraphicsExample extends JFrame implements Runnable{
     private static final int SCREEN_W = 640;
     private static final int SCREEN_H = 480;
     private float vx, vy;
-    private float rot, rotStep;
+    private float rot, rotStepFloat;
     private float scale, scaleStep;
     private float sx, sxStep;
     private float sy, syStep;
@@ -159,7 +159,7 @@ public class VectorGraphicsExample extends JFrame implements Runnable{
         ty = SCREEN_H / 2;
         vx = vy = 2;
         rot = 0.0f;
-        rotStep = (float) Math.toRadians(1.0);
+        rotStepFloat = (float) Math.toRadians(1.0);
         scale = 1.0f;
         scaleStep = 0.1f;
         sx = sy = 0.0f;
@@ -215,9 +215,9 @@ public class VectorGraphicsExample extends JFrame implements Runnable{
             }
         }
         if(doRotateBoolean){
-            rot += rotStep;
+            rot += rotStepFloat;
             if(rot < 0.0f || rot > 2 * Math.PI){
-                rotStep = -rotStep;
+                rotStepFloat = -rotStepFloat;
             }
         }
         if(doTranslateBoolean){
@@ -300,6 +300,19 @@ public class VectorGraphicsExample extends JFrame implements Runnable{
         g.drawString("X-Shear(X) : "+doXShearBoolean, 20, 80);
         g.drawString("Y-Shear(Y) : "+doYShearBoolean, 20, 95);
         g.drawString("Press [SPACE] to reset", 20, 110);
+////        2
+        for(int i = 0; i < worldVector2fArray.length; i++) {
+//////            worldVector2fArray[i].translate(-400, 0);
+            worldVector2fArray[i].rotate(rot);
+////            worldVector2fArray[i].x += SCREEN_W / 2;
+////            worldVector2fArray[i].y += SCREEN_H / 2;
+        }
+        rot += Math.toRadians(0.1);
+        if(rot < 0.0f || rot > 2 * Math.PI){
+            rotStepFloat = -rotStepFloat;
+        }
+//        g.drawOval( SCREEN_W / 2 - SCREEN_W / 4, SCREEN_H / 2 - SCREEN_W / 4, SCREEN_W / 2, SCREEN_W / 2);
+////        233
         Vector2f S = worldVector2fArray[worldVector2fArray.length - 1];
         Vector2f P = null;
         for(int i=0; i< worldVector2fArray.length; ++i){

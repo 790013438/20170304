@@ -127,7 +127,12 @@ public class Matrix3x3f {
     public static Matrix3x3f shear(Vector2f v) {
         return shear(v.x,v.y);
     }
-    
+    /**
+     * 屏幕y轴正方向是向下的
+     * @param x
+     * @param y
+     * @return
+     */
     public static Matrix3x3f shear(float x, float y) {
         return new Matrix3x3f(new float[][] {
             { 1.0f, y, 0.0f },

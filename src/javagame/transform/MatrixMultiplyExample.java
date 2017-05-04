@@ -28,7 +28,7 @@ public class MatrixMultiplyExample extends JFrame implements Runnable{
     private Thread gameThread;
     private volatile boolean runningVolatileBoolean;
     private FrameRate frameRate;
-    private float earthRot, earthDelta;
+    private float earthRotFloat, earthDeltaFloat;
     private float moonRot,moonDelta;
     private boolean showStars;
     private int[] stars;
@@ -155,7 +155,7 @@ public class MatrixMultiplyExample extends JFrame implements Runnable{
     private void initialize() {
         frameRate = new FrameRate();
         frameRate.initialize();
-        earthDelta = (float)Math.toRadians(0.5);
+        earthDeltaFloat = (float)Math.toRadians(0.5);
         moonDelta = (float)Math.toRadians(2.5);
         showStars = true;
         stars = new int[1000];
@@ -168,10 +168,10 @@ public class MatrixMultiplyExample extends JFrame implements Runnable{
     
     private void gameLoop() {
         processInput();
-//        2
         renderFrame();
-//        233
+//        2
         sleep(10L);
+//        233
     }
     
     private void processInput() {
@@ -226,26 +226,40 @@ public class MatrixMultiplyExample extends JFrame implements Runnable{
             }
         }
 //        draw the sum...
-        Matrix3x3f sunMat = Matrix3x3f.identity();
-        sunMat = sunMat.mul(Matrix3x3f.translate(SCREEN_W / 2, SCREEN_H / 2));
-        Vector2f sun = sunMat.mul(new Vector2f() );
+        /**
+         * The identity matrix is used as a starting point,
+         * and then multiplied by a translation matrix that moves to the center of the screen.
+         */
+        Matrix3x3f sunMatrix = Matrix3x3f.identity();
+        sunMatrix = sunMatrix.mul(Matrix3x3f.translate(SCREEN_W / 2, SCREEN_H / 2));
+        /**
+         * Thre sun vector is then multiplied by the matrix,
+         * placing the sun's center at the center of the screen.
+         * Althought it is only a single point,
+         * an entire polygon model could be multiplied by the matrix transforming all the coordinates.
+         */
+//        乘向量转化为点
+        Vector2f sun = sunMatrix.mul(new Vector2f() );
         g.setColor(Color.YELLOW);
         g.fillOval((int)sun.x - 50, (int)sun.y - 50, 100, 100);
 //        draw Earth's Orbit
         g.setColor(Color.WHITE);
         g.drawOval((int)sun.x - SCREEN_W / 4, (int)sun.y - SCREEN_W / 4, SCREEN_W / 2, SCREEN_W / 2);
 //        draw the Earth
-        Matrix3x3f earthMat = Matrix3x3f.translate(SCREEN_W / 4,0);
-        earthMat = earthMat.mul(Matrix3x3f.rotate(earthRot));
-        earthMat = earthMat.mul(sunMat);
-        earthRot += earthDelta;
-        Vector2f earth = earthMat.mul(new Vector2f());
+//        Matrix3x3f earthMatrix = Matrix3x3f.translate(SCREEN_W / 4,0);
+//        2
+        Matrix3x3f earthMatrix = Matrix3x3f.translate(0, SCREEN_W / 4);
+//        233
+        earthMatrix = earthMatrix.mul(Matrix3x3f.rotate(earthRotFloat));
+        earthMatrix = earthMatrix.mul(sunMatrix);
+        earthRotFloat += earthDeltaFloat;
+        Vector2f earthVector2f = earthMatrix.mul(new Vector2f());
         g.setColor(Color.BLUE);
-        g.fillOval((int)earth.x - 10, (int)earth.y - 10, 20, 20);
+        g.fillOval((int)earthVector2f.x - 10, (int)earthVector2f.y - 10, 20, 20);
 //        draw the Moom
         Matrix3x3f moonMat = Matrix3x3f.translate(30, 0);
         moonMat = moonMat.mul(Matrix3x3f.rotate(moonRot));
-        moonMat = moonMat.mul(earthMat);
+        moonMat = moonMat.mul(earthMatrix);
         moonRot += moonDelta;
         Vector2f moon = moonMat.mul(new Vector2f());
         g.setColor(Color.LIGHT_GRAY);
