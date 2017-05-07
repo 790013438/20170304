@@ -2,13 +2,17 @@ package javagame.util;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-/*
+
+/**
+ * Regardless of how the game uses the keyboard(and it could be an entirely new way),
+ * the usual method of listening to keyboard events does not fit the game loop program design.
+ * @author 79001
  * 为熟悉结构重写
  */
 public class KeyboardInput implements KeyListener {
     
     /**
-     * It is difficult to test when a key is prssed for the first time.
+     * It is difficult to test when a key is pressed for the first time.
      * If 20 keys need to be tracked,and some of those change behavior based on the game state,
      * it could become a very messy problem trying to keep track of all those states using code similar to this:
      * SimpleKeyboardExample.java
@@ -47,13 +51,13 @@ public class KeyboardInput implements KeyListener {
     
     public synchronized void keyReleased(KeyEvent e) {
         int keyCodeInt = e.getKeyCode();
-        if( keyCodeInt >= 0 && keyCodeInt <= keysBooleanArray.length ) {
+        if(keyCodeInt >= 0 && keyCodeInt <= keysBooleanArray.length) {
             keysBooleanArray[keyCodeInt] = false;
         }
     }
     
     public void keyTyped(KeyEvent e) {
-//   Not needed     
+//        Not needed
     }
     /**
      * The poll() method,synchronized to protected the shared keys array,transfers the keyboard 
@@ -61,9 +65,9 @@ public class KeyboardInput implements KeyListener {
      * otherwise it is set back to zero.The keyDown() method now checks if the value is not 
      * zero and a new method,keyDownOnce(),returns true when the value is exactly one.
      */
-    public void poll() {
-        for( int i = 0; i < keysBooleanArray.length; ++i ) {
-            if( keysBooleanArray[i] ) {
+    public synchronized void poll() {
+        for(int i = 0; i < keysBooleanArray.length; ++i) {
+            if(keysBooleanArray[i]) {
                 polledInt[i]++;
             } else {
                 polledInt[i] = 0;
