@@ -5,7 +5,7 @@ import java.awt.event.KeyListener;
 /*
  * 为熟悉结构重写
  */
-public class KeyboardInput implements KeyListener{
+public class KeyboardInput implements KeyListener {
     
     /**
      * It is difficult to test when a key is prssed for the first time.
@@ -22,11 +22,11 @@ public class KeyboardInput implements KeyListener{
      * }
      */
     private boolean[] keysBooleanArray;
-    private int[] polledIntArray;
+    private int[] polledInt;
     
     public KeyboardInput() {
         keysBooleanArray = new boolean[256];
-        polledIntArray = new int[256];
+        polledInt = new int[256];
     }
     /**
      * If the input was handled outside of the game loop,the state could change at any time.
@@ -40,20 +40,20 @@ public class KeyboardInput implements KeyListener{
      */
     public synchronized void keyPressed(KeyEvent e) {
         int keyCodeInt = e.getKeyCode();
-        if(keyCodeInt >= 0 && keyCodeInt <= keysBooleanArray.length ) {
+        if( keyCodeInt >= 0 && keyCodeInt <= keysBooleanArray.length ) {
             keysBooleanArray[keyCodeInt] = true;
         }
     }
     
     public synchronized void keyReleased(KeyEvent e) {
         int keyCodeInt = e.getKeyCode();
-        if(keyCodeInt >= 0 && keyCodeInt <= keysBooleanArray.length ) {
+        if( keyCodeInt >= 0 && keyCodeInt <= keysBooleanArray.length ) {
             keysBooleanArray[keyCodeInt] = false;
         }
     }
     
     public void keyTyped(KeyEvent e) {
-//        Not needed
+//   Not needed     
     }
     /**
      * The poll() method,synchronized to protected the shared keys array,transfers the keyboard 
@@ -61,22 +61,22 @@ public class KeyboardInput implements KeyListener{
      * otherwise it is set back to zero.The keyDown() method now checks if the value is not 
      * zero and a new method,keyDownOnce(),returns true when the value is exactly one.
      */
-    public synchronized void poll() {
-        for( int i = 0; i < keysBooleanArray.length; ++i) {
-            if(keysBooleanArray[i]) {
-                polledIntArray[i]++;
+    public void poll() {
+        for( int i = 0; i < keysBooleanArray.length; ++i ) {
+            if( keysBooleanArray[i] ) {
+                polledInt[i]++;
             } else {
-                polledIntArray[i] = 0;
+                polledInt[i] = 0;
             }
         }
     }
     
-    public boolean keyDown(int keyCodeInt) {
-        return polledIntArray[keyCodeInt] > 0;
+    public boolean keyDown(int keyCode) {
+        return polledInt[keyCode] > 0;
     }
     
-    public boolean keyDownOnce(int keyCodeInt) {
-        return polledIntArray[keyCodeInt] == 1;
+    public boolean keyDownOnce(int keyCode) {
+        return polledInt[keyCode] == 1;
     }
     
 }

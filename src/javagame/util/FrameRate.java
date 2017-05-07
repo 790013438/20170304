@@ -18,13 +18,13 @@ public class FrameRate {
      * Since the delta variables is rarely exactly one second,
      * 1000 milliseconds are subtracted from the delta variable to save the extra milliseconds.
      */
+    private long lastTimeLong;
     private long deltaLong;
-    private long lastLong;
     private int frameCountInt;
     private String frameRateString;
     
     public void initialize() {
-        lastLong = System.currentTimeMillis();
+        lastTimeLong = System.currentTimeMillis();
         frameRateString = "FPS 0";
     }
     
@@ -43,9 +43,9 @@ public class FrameRate {
          * Depending on the operating system,the accuracy of the time measured can vary.
          * Some versions of Windows,for example,guarantee only 10 milliseconds of accuracy.
          */
-        long currentLong = System.currentTimeMillis();
-        deltaLong += currentLong - lastLong;
-        lastLong = currentLong;
+        long currentTimeLong = System.currentTimeMillis();
+        deltaLong += currentTimeLong - lastTimeLong;
+        lastTimeLong = currentTimeLong;
         frameCountInt++;
         if( deltaLong > 1000 ) {
             deltaLong -= 1000;
