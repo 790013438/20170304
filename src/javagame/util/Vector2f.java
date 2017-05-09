@@ -13,60 +13,62 @@ package javagame.util;
  * @author 79001
  *
  */
+
 public class Vector2f {
     
     public float x;
     public float y;
     public float w;
     
-    public Vector2f(){
+    public Vector2f() {
         this.x = 0.0f;
         this.y = 0.0f;
         this.w = 1.0f;
     }
     
-    public Vector2f(Vector2f v){
+    public Vector2f(Vector2f v) {
         this.x = v.x;
         this.y = v.y;
         this.w = v.w;
     }
     
-    public Vector2f(float x,float y){
+    public Vector2f(float x, float y) {
         this.x = x;
         this.y = y;
         this.w = 1.0f;
     }
     
-    public Vector2f(float x, float y, float w){
+    public Vector2f(float x, float y, float w) {
         this.x = x;
         this.y = y;
         this.w = w;
-//        !?!
     }
-        
-    public void translate(float translatex,float translatey){
+    
+    public void translate(float translatex, float translatey) {
         x += translatex;
         y += translatey;
     }
     
-    public void scale(float scalex,float scaley){
+    public void scale(float scalex, float scaley) {
         x *= scalex;
         y *= scaley;
+    }
+    
+    public void rotate(float radian) {
+        float temp = (float)(x * Math.cos(radian) - y * Math.sin(radian));
+        y = (float)(x * Math.sin(radian) + y * Math.cos(radian));
+        x = temp;
+        
     }
     /**
      * Radian describes the plane angle subtended by a circular arc as the length of the arc divided by the radius of the arc.
      * @param radian
      */
-    public void rotate(float radian){ 
-        float temp = (float)(x * Math.cos(radian) - y * Math.sin(radian));
-        y = (float) (x * Math.sin(radian) + y * Math.cos(radian));
+    public void shear(float shearx, float sheary) {
+        float temp = x + shearx * y;
+        y = y + sheary * x;
         x = temp;
+        
     }
     
-    public void shear(float shearx,float sheary){
-        float temp = x + shearx * y;
-        y = y+ sheary * x;
-        x = temp;
-    }
-
 }
