@@ -2,17 +2,12 @@ package javagame.util;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
-/**
- * Regardless of how the game uses the keyboard(and it could be an entirely new way),
- * the usual method of listening to keyboard events does not fit the game loop program design.
- * @author 79001
+/*
  * 为熟悉结构重写
  */
-public class KeyboardInput implements KeyListener {
-    
+public class KeyboardInput implements KeyListener{
     /**
-     * It is difficult to test when a key is pressed for the first time.
+     * It is difficult to test when a key is prssed for the first time.
      * If 20 keys need to be tracked,and some of those change behavior based on the game state,
      * it could become a very messy problem trying to keep track of all those states using code similar to this:
      * SimpleKeyboardExample.java
@@ -27,11 +22,6 @@ public class KeyboardInput implements KeyListener {
      */
     private boolean[] keysBooleanArray;
     private int[] polledInt;
-    
-    public KeyboardInput() {
-        keysBooleanArray = new boolean[256];
-        polledInt = new int[256];
-    }
     /**
      * If the input was handled outside of the game loop,the state could change at any time.
      * Also,multiple keys may be down simultaneously,so handling each event by itself 
@@ -42,16 +32,21 @@ public class KeyboardInput implements KeyListener {
      * @param keyCodeInt
      * @return
      */
+    public KeyboardInput() {
+        keysBooleanArray = new boolean[256];
+        polledInt = new int[256];
+    }
+    
     public synchronized void keyPressed(KeyEvent e) {
         int keyCodeInt = e.getKeyCode();
-        if( keyCodeInt >= 0 && keyCodeInt <= keysBooleanArray.length ) {
+        if(keyCodeInt >= 0 && keyCodeInt < keysBooleanArray.length ) {
             keysBooleanArray[keyCodeInt] = true;
         }
     }
     
     public synchronized void keyReleased(KeyEvent e) {
         int keyCodeInt = e.getKeyCode();
-        if(keyCodeInt >= 0 && keyCodeInt <= keysBooleanArray.length) {
+        if(keyCodeInt >= 0 && keyCodeInt < keysBooleanArray.length ) {
             keysBooleanArray[keyCodeInt] = false;
         }
     }
@@ -73,6 +68,7 @@ public class KeyboardInput implements KeyListener {
                 polledInt[i] = 0;
             }
         }
+//        233
     }
     
     public boolean keyDown(int keyCode) {

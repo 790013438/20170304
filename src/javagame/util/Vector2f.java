@@ -1,4 +1,5 @@
 package javagame.util;
+
 /**
  * The Vector2f class is used to represent a location in space,
  * as well as a direction.
@@ -13,7 +14,6 @@ package javagame.util;
  * @author 79001
  *
  */
-
 public class Vector2f {
     
     public float x;
@@ -58,7 +58,6 @@ public class Vector2f {
         float temp = (float)(x * Math.cos(radian) - y * Math.sin(radian));
         y = (float)(x * Math.sin(radian) + y * Math.cos(radian));
         x = temp;
-        
     }
     /**
      * Radian describes the plane angle subtended by a circular arc as the length of the arc divided by the radius of the arc.
@@ -68,7 +67,6 @@ public class Vector2f {
         float temp = x + shearx * y;
         y = y + sheary * x;
         x = temp;
-        
     }
     
 }
