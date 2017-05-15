@@ -151,7 +151,7 @@ public class Matrix3x3f {
         return new Matrix3x3f(new float[][] {
             { (float) Math.cos(radian), (float) Math.sin(radian), 0.0F},
             { (float) -Math.sin(radian), (float)Math.cos(radian), 0.0F},
-            { 0.0F, 0,0F, 1.0F }
+            { 0.0F, 0.0F, 1.0F }
         });
     }
     

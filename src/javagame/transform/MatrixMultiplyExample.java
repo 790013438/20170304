@@ -246,9 +246,9 @@ public class MatrixMultiplyExample extends JFrame implements Runnable{
         g.setColor(Color.WHITE);
         g.drawOval((int)sun.x - SCREEN_W / 4, (int)sun.y - SCREEN_W / 4, SCREEN_W / 2, SCREEN_W / 2);
 //        draw the Earth
-//        Matrix3x3f earthMatrix = Matrix3x3f.translate(SCREEN_W / 4,0);
+        Matrix3x3f earthMatrix = Matrix3x3f.translate(SCREEN_W / 4,0);
 //        2
-        Matrix3x3f earthMatrix = Matrix3x3f.translate(0, SCREEN_W / 4);
+//        Matrix3x3f earthMatrix = Matrix3x3f.translate(0, SCREEN_W / 4);
 //        233
         earthMatrix = earthMatrix.mul(Matrix3x3f.rotate(earthRotFloat));
         earthMatrix = earthMatrix.mul(sunMatrix);
@@ -256,7 +256,7 @@ public class MatrixMultiplyExample extends JFrame implements Runnable{
         Vector2f earthVector2f = earthMatrix.mul(new Vector2f());
         g.setColor(Color.BLUE);
         g.fillOval((int)earthVector2f.x - 10, (int)earthVector2f.y - 10, 20, 20);
-//        draw the Moom
+//        draw the Moon
         Matrix3x3f moonMat = Matrix3x3f.translate(30, 0);
         moonMat = moonMat.mul(Matrix3x3f.rotate(moonRot));
         moonMat = moonMat.mul(earthMatrix);

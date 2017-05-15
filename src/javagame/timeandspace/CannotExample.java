@@ -10,7 +10,10 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import javagame.util.KeyboardInput;
+import javagame.util.Matrix3x3f;
 import javagame.util.RelativeMouseInput;
+import javagame.util.FrameRate;
+import javagame.util.Vector2f;
 
 public class CannotExample extends JFrame implements Runnable {
     
@@ -19,6 +22,11 @@ public class CannotExample extends JFrame implements Runnable {
     private BufferStrategy bufferStrategy;
     private Thread gameThread;
     private volatile boolean runningVolatileBoolean;
+    private FrameRate frameRate;
+    private Vector2f velocityVector2f;
+    private float cannonRot, cannonDelta;
+    private Vector2f[] cannonVector2fArray;
+    private Vector2f[] cannonCpy;
 
     public static void main(String[] args) {
         final CannotExample cannotExample = new CannotExample();
@@ -98,7 +106,7 @@ public class CannotExample extends JFrame implements Runnable {
          * just like the JPanel example in he Hello World application.
          */
         canvas.requestFocus();
-        gameThread new Thread();
+        gameThread = new Thread();
         gameThread.start();
     }
 
@@ -110,8 +118,8 @@ public class CannotExample extends JFrame implements Runnable {
         long lastTimeLong =curTimeLong;
         double nsPerFrame;
         while( runningVolatileBoolean ) {
-            curTime = System.nanoTime();
-            nsPerFrame = curTime - lastTime;
+            curTimeLong = System.nanoTime();
+            nsPerFrame = curTimeLong - lastTimeLong;
             /*
              * Notice that 1 second equals 1.0E9 nanoseconds.
              * Dividing the elapsed time by the number of nanoseconds per second produces the elapsed time per second.
@@ -125,7 +133,21 @@ public class CannotExample extends JFrame implements Runnable {
     }
 
     private void initialize() {
-        //frameRate = new FrameRate();
+        frameRate = new FrameRate();
+        frameRate.initialize();
+        velocityVector2f = new Vector2f();
+        cannonRot = 0.0f;
+        cannonDelta = (float)Math.toRadians(90.0);
+        cannonVector2fArray = new Vector2f[]{ new Vector2f(-0.5f, 0.125f), //top-left
+                    new Vector2f(0.5f, 0.125f), //top-right
+                    new Vector2f(0.5f, 0.125f), //bottom-right
+                    new Vector2f(-0.5f, -0.125f)
+        };
+        cannonCpy = new Vector2f[cannonVector2fArray.length];
+        Matrix3x3f scale = Matrix3x3f.scale(0.75f, 0.75f);
+        for(int i = 0; i < cannonVector2fArray.length; ++i ) {
+            cannonVector2fArray[i] = scale.mul(cannonVector2fArray[i]);
+        }
         //233
     }
 
