@@ -98,7 +98,7 @@ public class Matrix3x3f {
         });
     }
     
-    public static Matrix3x3f identity() {
+    public static Matrix3x3f identify() {
         return new Matrix3x3f(new float[][] {
             { 1.0F, 0.0F, 0.0F },
             { 0.0F, 1.0F, 0.0F },

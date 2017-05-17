@@ -46,6 +46,7 @@ public class Exercise {
         affineTransform.transform(floatSrcFloat, srcOffInt, doubleDestDouble, dstOffInt, numPtsInt);
 //        Shape -> Shape
         destShape = affineTransform.createTransformedShape(srcShape);
+        System.out.println();
         
         affineTransform.rotate( Math.PI / 3.0 );
         affineTransform.translate(5.0, 7.0);

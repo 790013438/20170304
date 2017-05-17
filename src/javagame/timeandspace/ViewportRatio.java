@@ -231,7 +231,7 @@ public class ViewportRatio extends JFrame implements Runnable {
         float sy = (canvas.getHeight() - 1) / worldHeight;
         float tx = (canvas.getWidth() - 1) / 2.0f;
         float ty = (canvas.getHeight() - 1) / 2.0f;
-        Matrix3x3f viewport = Matrix3x3f.identity();
+        Matrix3x3f viewport = Matrix3x3f.identify();
         viewport = viewport.mul(Matrix3x3f.scale(sx, sy));
         viewport = viewport.mul(Matrix3x3f.translate(tx, ty));
         for(int i = 0; i < tri.length; ++i) {
