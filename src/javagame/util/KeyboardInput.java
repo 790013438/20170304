@@ -15,20 +15,19 @@ public class KeyboardInput implements KeyListener {
 
     public synchronized void keyPressed( KeyEvent e ) {
         int keyCodeInt = e.getKeyCode();
-        if( keyCodeInt >= 0 && keyCodeInt < keysBooleanArray.length ) {
+        if(keyCodeInt >= 0 && keyCodeInt < keysBooleanArray.length ) {
             keysBooleanArray[keyCodeInt] = true;
         }
-        
     }
-
-    public synchronized void keyReleased(KeyEvent e) {
+    
+    public synchronized void keyReleased( KeyEvent e ) {
         int keyCodeInt = e.getKeyCode();
-        if( keyCodeInt >= 0 && keyCodeInt < keysBooleanArray.length ) {
+        if(keyCodeInt >= 0 && keyCodeInt < keysBooleanArray.length) {
             keysBooleanArray[keyCodeInt] = false;
         }
     }
 
-    public void keyTyped(KeyEvent e) {
+    public void keyTyped( KeyEvent e ) {
         //Not needed
     }
 
