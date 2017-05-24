@@ -97,8 +97,8 @@ public class ViewportRatio extends JFrame implements Runnable {
         canvas.createBufferStrategy(2);
         bufferStrategy = canvas.getBufferStrategy();
         /**
-         * Once the canvas object receives focus,it will receive keyboard input,
-         * but until it is selected the keyboard input is received only by the JFrame.
+         * Once the canvas object receives focus,it will receive keyboardInputBoolean input,
+         * but until it is selected the keyboardInputBoolean input is received only by the JFrame.
          */
         canvas.requestFocus();
         gameThread = new Thread(this);
@@ -231,7 +231,7 @@ public class ViewportRatio extends JFrame implements Runnable {
         float sy = (canvas.getHeight() - 1) / worldHeight;
         float tx = (canvas.getWidth() - 1) / 2.0f;
         float ty = (canvas.getHeight() - 1) / 2.0f;
-        Matrix3x3f viewport = Matrix3x3f.identify();
+        Matrix3x3f viewport = Matrix3x3f.identity();
         viewport = viewport.mul(Matrix3x3f.scale(sx, sy));
         viewport = viewport.mul(Matrix3x3f.translate(tx, ty));
         for(int i = 0; i < tri.length; ++i) {

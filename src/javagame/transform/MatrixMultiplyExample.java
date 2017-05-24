@@ -128,8 +128,8 @@ public class MatrixMultiplyExample extends JFrame implements Runnable{
 //        Add key listeners
         keyboardInputBoolean = new KeyboardInput();
         canvas.addKeyListener(keyboardInputBoolean);
-//        Add mouse listener
-//        For full screen : mouse = new RelativeMouseInput( this );
+//        Add relativeMouseInputBoolean listener
+//        For full screen : relativeMouseInputBoolean = new RelativeMouseInput( this );
         relativeMouseInputBoolean = new RelativeMouseInput(canvas);
         canvas.addMouseListener(relativeMouseInputBoolean);
         canvas.addMouseMotionListener(relativeMouseInputBoolean);
@@ -230,7 +230,7 @@ public class MatrixMultiplyExample extends JFrame implements Runnable{
          * The identity matrix is used as a starting point,
          * and then multiplied by a translation matrix that moves to the center of the screen.
          */
-        Matrix3x3f sunMatrix = Matrix3x3f.identify();
+        Matrix3x3f sunMatrix = Matrix3x3f.identity();
         sunMatrix = sunMatrix.mul(Matrix3x3f.translate(SCREEN_W / 2, SCREEN_H / 2));
         /**
          * Thre sun vector is then multiplied by the matrix,

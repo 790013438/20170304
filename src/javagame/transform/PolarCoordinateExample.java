@@ -114,8 +114,8 @@ public class PolarCoordinateExample extends JFrame implements Runnable{
 //        Add key listeners
         keyboardInputBoolean = new KeyboardInput();
         canvas.addKeyListener(keyboardInputBoolean);
-//        Add mouse listener
-//        For full screen: mouse =new RelativeMouseInput(this);
+//        Add relativeMouseInputBoolean listener
+//        For full screen: relativeMouseInputBoolean =new RelativeMouseInput(this);
         relativeMouseInputBoolean = new RelativeMouseInput(canvas);
         canvas.addMouseListener(relativeMouseInputBoolean);
         canvas.addMouseMotionListener(relativeMouseInputBoolean);
@@ -131,8 +131,8 @@ public class PolarCoordinateExample extends JFrame implements Runnable{
         canvas.createBufferStrategy(2);
         bufferStrategy = canvas.getBufferStrategy();
         /**
-         * Once the canvas object receives focus,it will receive keyboard input,
-         * but until it is selected the keyboard input is received only by the JFrame.
+         * Once the canvas object receives focus,it will receive keyboardInputBoolean input,
+         * but until it is selected the keyboardInputBoolean input is received only by the JFrame.
          */
         canvas.requestFocus();
 //      线程处理行为
@@ -152,7 +152,7 @@ public class PolarCoordinateExample extends JFrame implements Runnable{
         frameRate = new FrameRate();
         frameRate.initialize();
         /**
-         * The coord variable holds the screen position where the mouse is located,
+         * The coord variable holds the screen position where the relativeMouseInputBoolean is located,
          * offset by the center of the screen.
          */
         coord = new Point();
@@ -231,7 +231,7 @@ public class PolarCoordinateExample extends JFrame implements Runnable{
         g.drawString(frameRate.getFrameRate(), 20, 40);
         /**
          * The (cx,cy) coordinate represents the center of the screen and the (px,py)
-         * coordinate offsets the current mouse position from the center of the screen.
+         * coordinate offsets the current relativeMouseInputBoolean position from the center of the screen.
          */
         int cx = SCREEN_W / 2;
         int cy = SCREEN_H / 2;

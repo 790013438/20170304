@@ -1,81 +1,140 @@
-import java.awt.Rectangle;
-import java.awt.Shape;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+import java.util.List;
+import javagame.util.*;
 
-public class Exercise {
-    public static void main( String[] args ) {
-//        AffineTransform.setToIdentity();
-        AffineTransform affineTransform = new AffineTransform();
-        affineTransform.setToIdentity();
-        affineTransform.rotate(Math.toRadians(1.0));
-        affineTransform.scale(1.0, 0.5);
-        affineTransform.translate(50, 0);
-        affineTransform.shear(5, 0);
-        
-        Shape srcShape = new Rectangle();
-        Shape destShape = null;
-        Point2D srcPoint2D = new Point2D.Float();
-        Point2D destPoint2D = new Point2D.Float();
-        Point2D pointSrcPoint2D[] = new Point2D[] {
-                new Point2D.Float(),
-                new Point2D.Float(),
-                new Point2D.Float()
-        };
-        Point2D pointDestPoint2D[] = new Point2D[3];
-        double[] doubleSrcDouble = new double[6];
-        double[] doubleDestDouble = new double[6];
-        float[] floatSrcFloat = new float[6];
-        float[] floatDestFloat = new float[6];
-        int srcOffInt = 0;
-        int dstOffInt = 0;
-        int numPtsInt = 3;
-//        array is (x, y) pairs...
-//        Point -> Point
-        affineTransform.transform(srcPoint2D, destPoint2D);
-//        Point[] -> Point[]
-        affineTransform.transform(pointSrcPoint2D, srcOffInt, pointDestPoint2D, dstOffInt, numPtsInt);
-//        double[] -> double[]
-        affineTransform.transform(doubleSrcDouble, srcOffInt, doubleDestDouble, dstOffInt, numPtsInt);
-//        float[] -> float[]
-        affineTransform.transform(floatSrcFloat,  srcOffInt, floatDestFloat, dstOffInt, numPtsInt);
-//        double[] -> float[]
-        affineTransform.transform(doubleSrcDouble, srcOffInt, floatDestFloat, dstOffInt, numPtsInt);
-//        float[] -> double[]
-        affineTransform.transform(floatSrcFloat, srcOffInt, doubleDestDouble, dstOffInt, numPtsInt);
-//        Shape -> Shape
-        destShape = affineTransform.createTransformedShape(srcShape);
-        System.out.println();
-        
-        affineTransform.rotate( Math.PI / 3.0 );
-        affineTransform.translate(5.0, 7.0);
-        Shape shape = new Rectangle(0, 0, 100, 150);
-        Shape transformed = affineTransform.createTransformedShape(shape);
-        
-        PathIterator pitPathIterator = transformed.getPathIterator( null );
-        float[] segFloat = new float[6];
-        while( !pitPathIterator.isDone() ) {
-            int segTypeInt = pitPathIterator.currentSegment( segFloat );
-            String pointString = "(" + segFloat[0] + ", " + segFloat[1]+") ("+segFloat[2]+", "+segFloat[3]+") ("+segFloat[4]+", "+segFloat[5]+")";
-            switch(segTypeInt) {
-            case PathIterator.SEG_MOVETO:
-                System.out.println("SEG_MOVETO:"+pointString);
-                break;
-            case PathIterator.SEG_LINETO:
-                System.out.println("SEG_LINETO:"+pointString);
-                break;
-            case PathIterator.SEG_QUADTO:
-                System.out.println("SEG_QUADTO:"+pointString);
-                break;
-            case PathIterator.SEG_CUBICTO:
-                System.out.println("SEG_CUBICTO:"+pointString);
-                break;
-            case PathIterator.SEG_CLOSE:
-                System.out.println("SEG_CLOSE:"+pointString);
-                break;
-            }
-            pitPathIterator.next();
+public class Exercise extends SimpleFramework {
+    
+    private static final int MAX_POINTS = 10000;
+    private ArrayList<Vector2f> poly;
+    private ArrayList<Vector2f> polyCpy;
+    private ArrayList<Vector2f> inside;
+    private ArrayList<Vector2f> outside;
+    private Vector2f mousePos;
+    private boolean selected;
+    private boolean winding;
+
+    public Exercise() {
+        appWidth = 640;
+        appHeight = 640;
+        appTitle = "Point In Polygon Example";
+        appBackground = Color.BLACK;
+        appFPSColor = Color.GREEN;
+    }
+
+    @Override
+    protected void initialize() {
+        super.initialize();
+        // polygon points and lists of point inside
+        // and outside the polygon
+        poly = new ArrayList<Vector2f>();
+        polyCpy = new ArrayList<Vector2f>();
+        inside = new ArrayList<Vector2f>();
+        outside = new ArrayList<Vector2f>();
+        mousePos = new Vector2f();
+    }
+
+    @Override
+    protected void processInput(float delta) {
+        super.processInput(delta);
+        mousePos = getWorldMousePosition();
+        // draw polygon for algorithm testing
+        if (keyboardInputBoolean.keyDownOnce(KeyEvent.VK_SPACE)) {
+            winding = !winding;
         }
+        if (relativeMouseInputBoolean.buttonDownOnce(MouseEvent.BUTTON1)) {
+            poly.add(mousePos);
+        }
+        if (relativeMouseInputBoolean.buttonDownOnce(MouseEvent.BUTTON3)) {
+            poly.clear();
+        }
+    }
+
+    @Override
+    protected void updateObjects(float delta) {
+        super.updateObjects(delta);
+        // see if the relativeMouseInputBoolean is inside the polygon
+        selected = pointInPolygon(mousePos, poly, winding);
+        // test random points against the polygon
+        Random rand = new Random();
+        inside.clear();
+        outside.clear();
+        for (int i = 0; i < MAX_POINTS; ++i) {
+            float x = rand.nextFloat() * 2.0f - 1.0f;
+            float y = rand.nextFloat() * 2.0f - 1.0f;
+            Vector2f point = new Vector2f(x, y);
+            if (pointInPolygon(point, poly, winding)) {
+                inside.add(point);
+            } else {
+                outside.add(point);
+            }
+        }
+    }
+
+    private boolean pointInPolygon(Vector2f point, List<Vector2f> poly,
+            boolean winding) {
+        // point in polygon algorithm
+        int inside = 0;
+        if (poly.size() > 2) {
+            Vector2f start = poly.get(poly.size() - 1);
+            boolean startAbove = start.y >= point.y;
+            for (int i = 0; i < poly.size(); ++i) {
+                Vector2f end = poly.get(i);
+                boolean endAbove = end.y >= point.y;
+                if (startAbove != endAbove) {
+                    float m = (end.y - start.y) / (end.x - start.x);
+                    float x = start.x + (point.y - start.y) / m;
+                    if (x >= point.x) {
+                        if (winding) {
+                            inside += startAbove ? 1 : -1;
+                        } else {
+                            inside = inside == 1 ? 0 : 1;
+                        }
+                    }
+                }
+                startAbove = endAbove;
+                start = end;
+            }
+        }
+        return inside != 0;
+    }
+
+    @Override
+    protected void render(Graphics g) {
+        super.render(g);
+        // render instructions
+        g.drawString("Winding: " + (winding ? "ON" : "OFF"), 20, 35);
+        String mouse = String.format("Mouse: (%.2f,%.2f)", mousePos.x,
+                mousePos.y);
+        g.drawString(mouse, 20, 50);
+        g.drawString("Left-Click to add points", 20, 65);
+        g.drawString("Right-Click to clear points", 20, 80);
+        g.drawString("Space Bar to toggle winding", 20, 95);
+        Matrix3x3f view = getViewportTransform();
+        // draw test polygon
+        if (poly.size() > 1) {
+            polyCpy.clear();
+            for (Vector2f vector : poly) {
+                polyCpy.add(view.mul(vector));
+            }
+            g.setColor(selected ? Color.GREEN : Color.BLUE);
+            Utility.drawPolygon(g, polyCpy);
+        }
+        // draw inside point blue, outside points red
+        g.setColor(Color.BLUE);
+        for (Vector2f vector : inside) {
+            Vector2f point = view.mul(vector);
+            g.fillRect((int) point.x, (int) point.y, 1, 1);
+        }
+        g.setColor(Color.RED);
+        for (Vector2f vector : outside) {
+            Vector2f point = view.mul(vector);
+            g.fillRect((int) point.x, (int) point.y, 1, 1);
+        }
+    }
+
+    public static void main(String[] args) {
+        launchApp(new Exercise());
     }
 }

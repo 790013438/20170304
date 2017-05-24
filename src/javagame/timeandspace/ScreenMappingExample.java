@@ -90,8 +90,8 @@ public class ScreenMappingExample extends JFrame implements Runnable {
 //      Add key listeners
         keyboardInputBoolean = new KeyboardInput();
         canvas.addKeyListener(keyboardInputBoolean);
-//      Add mouse listener
-//      For full screen: mouse =new RelativeMouseInput(this);
+//      Add relativeMouseInputBoolean listener
+//      For full screen: relativeMouseInputBoolean =new RelativeMouseInput(this);
         relativeMouseInputBoolean = new RelativeMouseInput(canvas);
         canvas.addMouseListener(relativeMouseInputBoolean);
         canvas.addMouseMotionListener(relativeMouseInputBoolean);
@@ -107,8 +107,8 @@ public class ScreenMappingExample extends JFrame implements Runnable {
         canvas.createBufferStrategy(2);
         bufferStrategy = canvas.getBufferStrategy();
         /**
-         * Once the canvas object receives focus,it will receive keyboard input,
-         * but until it is selected the keyboard input is received only by the JFrame.
+         * Once the canvas object receives focus,it will receive keyboardInputBoolean input,
+         * but until it is selected the keyboardInputBoolean input is received only by the JFrame.
          */
         canvas.requestFocus();
 //      线程处理行为,设置画

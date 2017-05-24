@@ -32,12 +32,12 @@ public class SimpleMouseInput implements MouseListener,MouseMotionListener,Mouse
      * Second, when a synchronized method exits, it automatically establishes a happens-before relationship with any subsequent invocation of 
      * a synchronized method for the same object.
      * This guarantees that changes to the state of the object are visible to all threads.
-     * Just like the keyboard 
-     * listener,the pressed and released methods track the state of the mouse buttons,
-     * while the clicked method is ignored.To determine which mouse button was pressed,
-     * the mouse event contains the following method:public int MouseEvent.getButton()
+     * Just like the keyboardInputBoolean 
+     * listener,the pressed and released methods track the state of the relativeMouseInputBoolean buttons,
+     * while the clicked method is ignored.To determine which relativeMouseInputBoolean button was pressed,
+     * the relativeMouseInputBoolean event contains the following method:public int MouseEvent.getButton()
      * The button number starts at one instead of zero,which represents no button,and it is 
-     * necessary to subtract one from the button number to reference the mouse button array.
+     * necessary to subtract one from the button number to reference the relativeMouseInputBoolean button array.
      * @param e
      */
     public synchronized void mousePressed(MouseEvent e){
@@ -57,8 +57,8 @@ public class SimpleMouseInput implements MouseListener,MouseMotionListener,Mouse
     }
     /**
      * All four of these methods-entered,exited,dragged,and moved-capture the position 
-     * of the mouse while informing the program if teh mouse is entering or leaving the component 
-     * listening for mouse events.The following method gets the current position of the mouse
+     * of the relativeMouseInputBoolean while informing the program if teh relativeMouseInputBoolean is entering or leaving the component 
+     * listening for relativeMouseInputBoolean events.The following method gets the current position of the relativeMouseInputBoolean
      */
     public synchronized void mouseEntered(MouseEvent e){
         mouseMoved(e);
@@ -73,7 +73,7 @@ public class SimpleMouseInput implements MouseListener,MouseMotionListener,Mouse
         currentPosPoint=e.getPoint();
     }
     /**
-     * The following method returns the clicks of the clicks of the mouse wheel.If the number is negative,
+     * The following method returns the clicks of the clicks of the relativeMouseInputBoolean wheel.If the number is negative,
      * the wheel has been moved away from the user.If the value is positive,the wheel has 
      * been moved toward the user.
      */

@@ -80,7 +80,7 @@ public class RelativeMouseExample extends JFrame implements Runnable{
 //        Add key listeners
         keyboardInputBoolean=new KeyboardInput();
         canvas.addKeyListener(keyboardInputBoolean);
-//        Add mouse listener
+//        Add relativeMouseInputBoolean listener
         relativeMouseInputBoolean=new RelativeMouseInput(canvas);
         canvas.addMouseListener(relativeMouseInputBoolean);
         canvas.addMouseMotionListener(relativeMouseInputBoolean);
@@ -96,8 +96,8 @@ public class RelativeMouseExample extends JFrame implements Runnable{
         canvas.createBufferStrategy(2);
         bufferStrategy=canvas.getBufferStrategy();
         /**
-         * Once the canvas object receives focus,it will receive keyboard input,
-         * but until it is selected the keyboard input is received only by the JFrame.
+         * Once the canvas object receives focus,it will receive keyboardInputBoolean input,
+         * but until it is selected the keyboardInputBoolean input is received only by the JFrame.
          */
         canvas.requestFocus();
 //      线程处理行为，逻辑
@@ -230,7 +230,7 @@ public class RelativeMouseExample extends JFrame implements Runnable{
         frameRate.calculate();
         g.drawString(relativeMouseInputBoolean.getPosition().toString(),20,20);
         g.drawString("Relative: "+relativeMouseInputBoolean.isRelative(),20, 35);
-        g.drawString("Press Space to switch mouse modes", 20, 50);
+        g.drawString("Press Space to switch relativeMouseInputBoolean modes", 20, 50);
         g.drawString("Press C to toggle cursor",20,65);
         g.setColor(Color.BLACK);
         g.drawRect(point.x, point.y, 25, 25);

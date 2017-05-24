@@ -78,7 +78,7 @@ public class KeyboardExample extends JFrame implements Runnable{
      */
     public void gameLoop(){
         /**
-         * The poll() method,synchronized to protect the shared keys array,transfers the keyboard 
+         * The poll() method,synchronized to protect the shared keys array,transfers the keyboardInputBoolean 
          * state from the boolean array to the integer array.
          */
         keyboardInputBoolean.poll();

@@ -92,14 +92,14 @@ public class SimpleMouseExample extends JFrame implements Runnable{
         pack();
 //        add key listener
         /**
-         * When the application first starts up,it will not process keyboard 
+         * When the application first starts up,it will not process keyboardInputBoolean 
          * events if they have not been added to the JFrame.Once the canvas object receives 
-         * focus,it will receive keyboard input,but until it is selected the keyboard input is 
+         * focus,it will receive keyboardInputBoolean input,but until it is selected the keyboardInputBoolean input is 
          * received only by the JFrame.
          */
         keyboardInputBoolean=new KeyboardInput();
         canvas.addKeyListener(keyboardInputBoolean);
-//        add mouse listener
+//        add relativeMouseInputBoolean listener
         simpleMouseInputBoolean=new SimpleMouseInput();
         canvas.addMouseListener(simpleMouseInputBoolean);
         canvas.addMouseMotionListener(simpleMouseInputBoolean);
@@ -119,8 +119,8 @@ public class SimpleMouseExample extends JFrame implements Runnable{
          */
         bufferStrategy=canvas.getBufferStrategy();
         /**
-         * Once the canvas object receives focus,it will receive keyboard input,
-         * but until it is selected the keyboard input is received only by the JFrame.
+         * Once the canvas object receives focus,it will receive keyboardInputBoolean input,
+         * but until it is selected the keyboardInputBoolean input is received only by the JFrame.
          */
         canvas.requestFocus();
 //      线程处理行为，逻辑
@@ -142,8 +142,8 @@ public class SimpleMouseExample extends JFrame implements Runnable{
     }
     /**
      * In the game loop,the following method call has been added.
-     * Inside this method,both the keyboard and mouse are polled to make their data available.
-     * When the mouse button is first pressed,the drawing flag is set.     
+     * Inside this method,both the keyboardInputBoolean and relativeMouseInputBoolean are polled to make their data available.
+     * When the relativeMouseInputBoolean button is first pressed,the drawing flag is set.     
      */
     private void processInput(){
         keyboardInputBoolean.poll();
@@ -154,7 +154,7 @@ public class SimpleMouseExample extends JFrame implements Runnable{
 //        if button pressed for first time,
 //        start drawing pointArrayList
         /**
-         * For each frame that the left mouse button is down,
+         * For each frame that the left relativeMouseInputBoolean button is down,
          * a now point is added to the line's data structure.
          * When the button is released,the flag is cleared,and a null object is added to the list,
          * marking the end of the line.
@@ -315,7 +315,7 @@ public class SimpleMouseExample extends JFrame implements Runnable{
         g.setColor(color);
         frameRate.calculate();
         g.drawString(frameRate.getFrameRate(), 30, 30);
-        g.drawString("Use mouse to draw lines", 30, 45);
+        g.drawString("Use relativeMouseInputBoolean to draw lines", 30, 45);
         g.drawString("Press C to clear lines", 30, 60);
         g.drawString("Mouse Wheel cycles colors", 30, 75);
         g.drawString(simpleMouseInputBoolean.getPosition().toString(), 30, 90);

@@ -28,6 +28,12 @@ public class Vector2f {
         this.y = y;
         this.w = w;
     }
+    
+    public Vector2f(Vector2f v) {
+        this.x = v.x;
+        this.y = v.y;
+        this.w = v.w;
+    }
 
     public void translate(float tx, float ty) {
         x += tx;
@@ -118,12 +124,6 @@ public class Vector2f {
     }
 
     /*
-     */
-    public Vector2f perp() {
-        return new Vector2f(-y, x);
-    }
-
-    /*
      * The perp() method returns a new vector that is perpendicular to the current vector.
      * This is useful for creating a normal vector that is needed in may of the equations in the following chapters.
      * Notice that either (-y, x) or (y, -x) produce a perpendicular vector.
@@ -138,7 +138,7 @@ public class Vector2f {
      * This method of multiplying two vectors is very useful.
      * The dot product projects one vector onto another, forming a right triangle, which is very helpful when testing object intersections.
      */
-    public float dot() {
+    public float dot(Vector2f v) {
         return x * v.x + y * v.y;
     }
 

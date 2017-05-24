@@ -94,7 +94,7 @@ public class CannonExample extends JFrame implements Runnable {
         //add key Listener
         keyboardInputBoolean = new KeyboardInput();
         canvas.addKeyListener(keyboardInputBoolean);
-        //add mouse listener,mouse motion listener,mouse wheel listener
+        //add relativeMouseInputBoolean listener,relativeMouseInputBoolean motion listener,relativeMouseInputBoolean wheel listener
         relativeMouseInputBoolean = new RelativeMouseInput(canvas);
         canvas.addMouseListener(relativeMouseInputBoolean);
         canvas.addMouseMotionListener(relativeMouseInputBoolean);
@@ -182,7 +182,7 @@ public class CannonExample extends JFrame implements Runnable {
     }
 
     private void updateObjects(double delta) {
-        Matrix3x3f mat = Matrix3x3f.identify();
+        Matrix3x3f mat = Matrix3x3f.identity();
         mat = mat.mul(Matrix3x3f.rotate(cannonRotFloat));
         mat = mat.mul(Matrix3x3f.translate(-2.0f, -2.0f));
         for(int i = 0; i < cannonVector2fArray.length; ++i) {

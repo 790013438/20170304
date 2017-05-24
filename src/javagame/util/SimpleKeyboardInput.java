@@ -3,11 +3,11 @@ package javagame.util;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 /**
- * The problem is,the keyboard is a piece of hardware maintained by the operating system.
- * The operating system,and not the software,generate and dispatch keyboard 
+ * The problem is,the keyboardInputBoolean is a piece of hardware maintained by the operating system.
+ * The operating system,and not the software,generate and dispatch keyboardInputBoolean 
  * events to whatever applications have focus.There is nothing stopping the user from 
  * switching from a game window to a web browser and checking email.Because of 
- * this,all the keyboard events arrive on a different thread and need to be made available 
+ * this,all the keyboardInputBoolean events arrive on a different thread and need to be made available 
  * to the game loop.
  * @author 79001
  *
@@ -26,7 +26,7 @@ public class SimpleKeyboardInput implements KeyListener{
     /**
      * If the input was handled outside of the game loop,the state could change at any time.
      * Also,multiple keys may be down simultaneously,so handling each event by itself 
-     * doesn't let the user combine keys.To simplify input processing,the keyboard events 
+     * doesn't let the user combine keys.To simplify input processing,the keyboardInputBoolean events 
      * are saved and make available to the game loop.Finally,after using the synchronized keyword to protect the key state array 
      * when it is being accessed from multiple threads,it gives access to the current key 
      * state with the keyDown(int keyCode) method.

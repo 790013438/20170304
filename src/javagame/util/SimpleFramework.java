@@ -42,6 +42,7 @@ public class SimpleFramework extends JFrame implements Runnable {
 
     protected static void launchApp(final SimpleFramework simpleFramework) {
         simpleFramework.addWindowListener(new WindowAdapter() {
+            //处理退出
             public void windowClosing(WindowEvent e) {
                 simpleFramework.onWindowClosing();
             }
@@ -56,7 +57,7 @@ public class SimpleFramework extends JFrame implements Runnable {
     protected void onWindowClosing() {
         try{
             runningVolatileBoolean = false;
-            gameThread.wait();
+            gameThread.join();
         } catch(Exception e) {
             System.out.println(e);
         }
@@ -152,12 +153,12 @@ public class SimpleFramework extends JFrame implements Runnable {
     protected void terminate() {
     }
 
-    protected void processInput( double delta ) {
+    protected void processInput( float delta ) {
         keyboardInputBoolean.poll();
         relativeMouseInputBoolean.poll();
     }
-
-    protected void updateObjects( double delta ) {
+  
+    protected void updateObjects( float delta ) {
     }
 
     protected void renderFrame() {

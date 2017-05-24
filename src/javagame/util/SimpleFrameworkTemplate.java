@@ -16,8 +16,7 @@ public class SimpleFrameworkTemplate extends SimpleFramework{
      * The constructor is the place to set of the application's properties.
      * Setting the properties in the initialize() method is to late,
      * because some of them have already been used before the initialize() method is called.
-     * Any properties whose default values are acceptable can be removed from the constructor. 
-     * 233
+     * Any properties whose default values are acceptable can be removed from the constructor.
      */
     public SimpleFrameworkTemplate() {
         appBackground = Color.WHITE;

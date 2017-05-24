@@ -109,8 +109,8 @@ public class RelativeMouseInput implements MouseListener, MouseMotionListener, M
         return polledInt[buttonInt - 1] > 0;
     }
 
-    public boolean buttonDowOnce(int buttonInt) {
-        return polledInt[buttonInt - 1] == 0;
+    public boolean buttonDownOnce(int buttonInt) {
+        return polledInt[buttonInt - 1] == 1;
     }
 
     public int getNoches() {

@@ -97,7 +97,7 @@ public class Matrix3x3f {
                 +vec.w * this.matrix[2][0],//
                  vec.x * this.matrix[0][1] //V.y
                 +vec.y * this.matrix[1][1] //
-                +vec.y * this.matrix[2][1],
+                +vec.w * this.matrix[2][1],
                  vec.x * this.matrix[0][2] //
                 +vec.y * this.matrix[1][2]
                 +vec.w * this.matrix[2][2]
@@ -126,7 +126,7 @@ public class Matrix3x3f {
         });
     }
 
-    public static Matrix3x3f identify() {
+    public static Matrix3x3f identity() {
         return new Matrix3x3f(new float[][] {
             { 1.0f, 0.0f, 0.0f},
             { 0.0f, 1.0f, 0.0f},
