@@ -77,7 +77,7 @@ public class Vector2f {
      * The arrow of the new vector will point to the first vector in the operation.
      * Sometimes it is easier to visualize subtraction as adding the inverse of a vector.
      */
-    public Vector2f sub(Vector2f v) {
+    public Vector2f sub (Vector2f v) {
         return new Vector2f(x - v.x, y - v.y);
     }
 

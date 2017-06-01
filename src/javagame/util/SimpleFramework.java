@@ -9,65 +9,67 @@ import java.awt.Point;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.image.BufferStrategy;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-public class SimpleFramework extends JFrame implements Runnable {
+public class SimpleFramework extends JFrame implements Runnable{
 
-    protected Color appBackground = Color.BLACK;
+    protected Color appBackground = Color.BLACK; 
     protected boolean appMaintainRatio = false;
     protected Color appBorder = Color.LIGHT_GRAY;
     protected int appWidth = 640;
     protected int appHeight = 480;
     protected String appTitle = "TBD-Title";
+    protected long appSleep = 10L;
     protected float appBorderScale = 0.8f;
     protected float appWorldWidth = 2.0f;
     protected float appWorldHeight = 2.0f;
     protected Font appFont = new Font("Courier New", Font.PLAIN, 14);
     protected Color appFPSColor = Color.GREEN;
-    protected long appSleep = 10L;
     protected KeyboardInput keyboardInputBoolean;
     protected RelativeMouseInput relativeMouseInputBoolean;
+    protected Canvas canvas;
     protected BufferStrategy bufferStrategy;
     protected Thread gameThread;
-    protected Canvas canvas;
     protected boolean runningVolatileBoolean;
-    private FrameRate frameRate;
+    protected FrameRate frameRate;
 
     public SimpleFramework() {
     }
 
-    protected static void launchApp(final SimpleFramework simpleFramework) {
-        simpleFramework.addWindowListener(new WindowAdapter() {
+    protected static void launchApp(final SimpleFramework  simpleframework) {
+        simpleframework.addWindowListener(new WindowAdapter(){
             //处理退出
-            public void windowClosing(WindowEvent e) {
-                simpleFramework.onWindowClosing();
+            public void WindowClosing(WindowEvent e) {
+                simpleframework.onWindowClosing();
             }
         });
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                simpleFramework.createAndShowGUI();
+                simpleframework.createAndShowGUI();
             }
         });
     }
 
     protected void onWindowClosing() {
-        try{
+        try {
             runningVolatileBoolean = false;
             gameThread.join();
-        } catch(Exception e) {
+        } catch (Exception e) {
             System.out.println(e);
         }
         System.exit(0);
     }
 
-    protected void createAndShowGUI() {
+    public void createAndShowGUI() {
         canvas = new Canvas();
         //The background color of the main game area.
         canvas.setBackground(appBackground);
+        //The Component.setIgnoreRePaint() method takes crea of ignoring extra paint messages.
         canvas.setIgnoreRepaint(true);
         getContentPane().add(canvas);
         setLocationByPlatform(true);
@@ -75,11 +77,16 @@ public class SimpleFramework extends JFrame implements Runnable {
         if (appMaintainRatio) {
             //The color of the border when the aspect ratio is maintained.
             getContentPane().setBackground(appBorder);
-            //appWidth - The startup width of the window.
+            //appHeight - The startup width of the window.
             setSize(appWidth, appHeight);
             //appHeight - The startup height of the window.
             canvas.setSize(appWidth, appHeight);
             setLayout(null);
+            /**
+             * When the component's size, location, or visibility changes, 
+             * the relevant method in the listener object is invoked,
+             * and the ComponentEvent is passed to is.
+             */
             getContentPane().addComponentListener(new ComponentAdapter() {
                 public void componentResized(ComponentEvent e) {
                     onComponentResized(e);
@@ -132,10 +139,12 @@ public class SimpleFramework extends JFrame implements Runnable {
         while(runningVolatileBoolean) {
             curTime = System.nanoTime();
             nsPerFrame = curTime - lastTime;
-            gameLoop((float) (nsPerFrame / 1.0E9));
+            gameLoop((float)(nsPerFrame / 1.0E9));
+            //233
             lastTime = curTime;
         }
         terminate();
+        //233
     }
 
     protected void initialize() {
@@ -143,83 +152,15 @@ public class SimpleFramework extends JFrame implements Runnable {
         frameRate.initialize();
     }
 
-    protected void gameLoop(float delta) {
-        processInput(delta);
-        updateObjects(delta);
-        renderFrame();
-        sleep(appSleep);
+    protected void gameLoop (float delta) {
+        //processInput(delta);
+        //updateObjects(delta);
+        //renderFrame();
+        //sleep(appSleep);
+        //233
     }
 
-    protected void terminate() {
+    protected void terminate () {
+        //233
     }
-
-    protected void processInput( float delta ) {
-        keyboardInputBoolean.poll();
-        relativeMouseInputBoolean.poll();
-    }
-  
-    protected void updateObjects( float delta ) {
-    }
-
-    protected void renderFrame() {
-        do {
-            do {
-                Graphics g = null;
-                try {
-                    g = bufferStrategy.getDrawGraphics();
-                    g.clearRect(0, 0, getWidth(), getHeight());
-                    render(g);
-                } catch(Exception e) {
-                    System.out.println(e);
-                } finally {
-                    if ( g != null ) {
-                        g.dispose();
-                    }
-                }
-            } while(bufferStrategy.contentsRestored());
-            bufferStrategy.show();
-        } while(bufferStrategy.contentsLost());
-    }
-
-    private void sleep( long sleep ) {
-        try {
-            Thread.sleep(sleep);
-        } catch(Exception e) {
-            System.out.println(e);
-        }
-    }
-
-    protected void render(Graphics g) {
-        g.setFont(appFont);
-        g.setColor(appFPSColor);
-        frameRate.calculate();
-        g.drawString(frameRate.getFrameRate(), 20, 20);
-    }
-
-
-    protected Matrix3x3f getViewportTransform() {
-        return Utility.createViewport(appWorldWidth, appWorldHeight, 
-                canvas.getWidth(), canvas.getHeight());
-    }
-
-    protected Matrix3x3f getReverseViewportTransform() {
-        return Utility.createReverseViewport(appWorldWidth, appWorldHeight, 
-                canvas.getWidth(), canvas.getHeight());
-    }
-
-    protected Vector2f getWorldMousePosition() {
-        Matrix3x3f screenToWorld = getReverseViewportTransform();
-        Point mousePosPoint = relativeMouseInputBoolean.getPosition();
-        Vector2f screenPos = new Vector2f(mousePosPoint.x, mousePosPoint.y);
-        return screenToWorld.mul(screenPos);
-    }
-
-    protected Vector2f getRelativeWorldMousePosition() {
-        float sx = appWorldWidth / (canvas.getWidth() - 1);
-        float sy = appWorldHeight / (canvas.getHeight() -1);
-        Matrix3x3f viewport = Matrix3x3f.scale(sx, -sy);
-        Point p =relativeMouseInputBoolean.getPosition();
-        return viewport.mul(new Vector2f(p.x, p.y));
-    }
-
 }
