@@ -114,11 +114,11 @@ public class RelativeMouseInput implements MouseListener, MouseMotionListener, M
         }
     }
 
-    public boolean keyDown (int keyInt) {
+    public boolean buttonDown (int keyInt) {
         return polledInt[keyInt - 1] > 0;
     }
 
-    public boolean keyDownOnce(int keyInt) {
+    public boolean buttonDownOnce(int keyInt) {
         return polledInt[keyInt - 1] == 0;
     }
 

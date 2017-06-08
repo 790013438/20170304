@@ -1,15 +1,163 @@
-package java.intersection;
+package javagame.intersection;
 
 import java.awt.*;
 import java.awt.event.*;
 
-import javagame.util.*
+import javagame.util.*;
 //Because the rectangle is not rotated, it is an easy shape to use for intersection testing.
 //The shape can be represented with only a minimum and a maximum value.
 public class OverlapExample extends SimpleFramework {
+    //mouse variables
+    private Vector2f mousePos;
+    //AABB variables
+    private Vector2f min0, max0;
+    private Vector2f min1, max1;
+    private float f1;
+    private Vector2f rect0Pos;
+    private Vector2f rect1Pos;
+    private Vector2f mouseDelta;
+    private boolean clicked;
+    private boolean dragging;
+    private Vector2f min0Cpy, max0Cpy; 
+    private Vector2f min1Cpy, max1Cpy;
+    private boolean rect0Moving;
+    private boolean rect1Moving;
+    private boolean rect0Collision;
+    private boolean rect1Collision;
+    //circle variables
+    private Vector2f c0, c0Pos;
+    private float r0;
+    private boolean circle0Moving;
+    private boolean circle0Collision;
+    //
+    //233
+    private Vector2f c1, c1Pos;
+    private float r1;
+    private boolean circle1Moving;
+    private boolean circle1Collision;
+
+    public OverlapExample () {
+        appHeight = 640;
+        appWidth = 640;
+        appTitle = "OverlapExample";
+        appBackground = Color.WHITE;
+        appFPSColor = Color.BLACK;
+    }
+
+    protected void initialize () {
+        super.initialize();
+        mousePos = new Vector2f();
+        min0 = new Vector2f(-0.25f, -0.25f);
+        max0 = new Vector2f(0.25f, 0.25f);
+        min1 = new Vector2f(-0.3f, -0.3f);
+        max1 = new Vector2f(0.3f, 0.3f);
+        
+        r0 = 0.25f;
+        r1 = 0.125f;
+        
+       reset();
+    } 
+
+    private void reset () {
+        rect0Pos = new Vector2f();
+        rect1Pos = new Vector2f(0.25f, 0.5f);
+        c0Pos = new Vector2f(-0.60f, -0.60f);
+        c1Pos = new Vector2f(0.6f, 0.6f);
+    } 
+
+    protected void processInput (float delta) {
+        super.processInput(delta);
+        //reset objects on space bar
+        if (keyboardInputBoolean.keyDownOnce(KeyEvent.VK_SPACE)) {
+            reset();
+        }
+        //convert screen coordinates to world coordinates
+        //for intersection testing
+        Vector2f pos = getWorldMousePosition();
+        mouseDelta = pos.sub(mousePos);
+        mousePos = pos;
+        
+        clicked = relativeMouseInputBoolean.buttonDownOnce(MouseEvent.BUTTON1);
+        dragging = relativeMouseInputBoolean.buttonDown(MouseEvent.BUTTON1);
+    }
+
+    protected void updateObjects (float delta) {
+        super.updateObjects(delta);
+        //calculate the AABB minimum and maximum values
+        Matrix3x3f mat = Matrix3x3f.translate(rect0Pos.x, rect0Pos.y);
+        min0Cpy = mat.mul(min0);
+        max0Cpy = mat.mul(max0);
+        mat = Matrix3x3f.translate(rect1Pos.x, rect1Pos.y);
+        min1Cpy = mat.mul(min1);
+        max1Cpy = mat.mul(max1);
+        //position the circles
+        mat = Matrix3x3f.translate(c0Pos.x, c0Pos.y);
+        c0 = mat.mul(new Vector2f());
+        mat = Matrix3x3f.translate(c1Pos.x, c1Pos.y);
+        c1 = mat.mul(new Vector2f());
+        //test for click and drag of objects
+        if (clicked && pointInAABB(mousePos, min0Cpy, max0Cpy)) {
+            rect0Moving = true;
+        }
+        if (clicked && pointInAABB(mousePos, min1Cpy, max1Cpy)) {
+            rect1Moving = true;
+        } 
+        if (clicked && pointInCircle(mousePos, c0Pos, r0)) {
+            circle0Moving = true;
+        } 
+        if (clicked && pointInCircle(mousePos, c1Pos, r1)) {
+            circle1Moving = true;
+        } 
+        rect0Moving = rect0Moving && dragging;
+        if (rect0Moving) {
+            rect0Pos = rect0Pos.add(mouseDelta);
+        }
+        rect1Moving = rect1Moving && dragging;
+        if (rect1Moving) {
+            rect1Pos = rect0Pos.add(mouseDelta);
+        }
+        circle0Moving = circle0Moving && dragging;
+        if (circle0Moving) {
+            c0Pos = c0Pos.add(mouseDelta);
+        } 
+        circle1Moving = circle1Moving && dragging;
+        if (circle1Moving) {
+            c1Pos = c1Pos.add(mouseDelta);
+        }
+        rect0Collision = false;
+        rect1Collision = false;
+        circle0Collision = false;
+        circle1Collision = false;
+        //perform intersection testing
+        if (intersectAABB(min0Cpy, max0Cpy, min1Cpy, max1Cpy)) {
+            rect0Collision = true;
+            rect1Collision = true;
+        }
+        if (intersectCircle(c0, r0, c1, r1)) {
+            circle0Collision = true;
+            circle1Collision = true;
+        }
+        if (intersectCircleAABB(c0, r0, min0Cpy, max0Cpy)) {
+            circle0Collision = true;
+            rect0Collision = true;
+        }
+        if (intersectCircleAABB(c0, r0, min1Cpy, max1Cpy)) {
+            circle0Collision = true;
+            rect1Collision = true;
+        }
+        if (intersectCircleAABB(c1, r1, min0Cpy, max0Cpy)) {
+            circle1Collision = true;
+            rect0Collision =true;
+        }
+        if (intersectCircleAABB(c1, r1, min1Cpy, max1Cpy)) {
+            circle1Collision = true;
+            rect1Collision = true;
+        }
+    }
+
     //Because the rectangle is not rotated, it is an easy shape to use for intersection testing.
     //The shape can be represented with only a minimum and a maximum value.
-    provate void drawAABB(Graphics g, Vector2f min, Vector2f max){
+    private void drawAABB(Graphics g, Vector2f min, Vector2f max){
         
         Matrix3x3f view = getViewportTransform();
         
@@ -17,9 +165,9 @@ public class OverlapExample extends SimpleFramework {
         topLeft = view.mul(topLeft);
         
         Vector2f bottomRight = new Vector2f(max.x, min.y);
-        bottomRight = view.mul((bottomRight);
+        bottomRight = view.mul(bottomRight);
         
-        int rectX = (int)bopLeft.x;
+        int rectX = (int)topLeft.x;
         int rectY = (int)topLeft.y;
         int rectWidth = (int)(bottomRight.x - topLeft.x);
         int rectHeight = (int)(bottomRight.y - topLeft.y);
@@ -34,7 +182,7 @@ public class OverlapExample extends SimpleFramework {
             p.y > min.y && p.y < max.y;
     }
 
-    //Checking if two AABBs overlop is also easy.
+    //Checking if two AABBs overlap is also easy.
     //If any of the values do not overlap, then there is no intersection.
     private boolean intersectAABB (Vector2f minA, Vector2f maxA, 
         Vector2f minB, Vector2f maxB) {
@@ -65,7 +213,7 @@ public class OverlapExample extends SimpleFramework {
     //If the radius is larger than the distance, the point is inside the circle.
     //Because the square root method can be slow, it is easier to check the squared distance.
     //if a < b then a^2 < b^2
-    //Most of the comparisions using the distance in the following examples use the squared 
+    //Most of the comparisons using the distance in the following examples use the squared 
     //distance for comparison.
     //This is illustrated in the following method:
     private boolean pointInCircle (Vector2f p, Vector2f c, float r) {
@@ -100,23 +248,43 @@ public class OverlapExample extends SimpleFramework {
       float dx = 0.0f;
       if (c.x < min.x) dx = c.x - min.x;
       if (c.x > max.x) dx = c.x - max.x;
-
+      
       float dy = 0.0f;
       if (c.y < min.y) dy = c.y - min.y;
       if (c.y > max.y) dy = c.y - max.y;
-
+      
       float d = dx * dx + dy * dy;
       return d < r*r;
       }*/
     //It is possible to optimize this code by combining the dx and dy variables into a single variable,
     //performing the square and accumulation in he same line.
     //The optimized version is as follows:
-    private boolean intersectCircleAABBB (Vector2f c, float r, Vector2f min, Vector2f max) {
+    private boolean intersectCircleAABB (Vector2f c, float r, Vector2f min, Vector2f max) {
         float d = 0.0f;
         if (c.x < min.x) d += (c.x - min.x)*(c.x - min.x);
         if (c.x > max.x) d += (c.x - max.x)*(c.x - max.x);
         if (c.y < min.y) d += (c.y - min.y)*(c.y - min.y);
         if (c.y > max.y) d += (c.y - max.y)*(c.y - max.y); 
         return d < r*r;
+    }
+
+    protected void render (Graphics g) {
+        super.render(g);
+        //render instructions
+        g.drawString("Dragging:"+dragging, 20, 35);
+        g.drawString("Click and hold to drag shapes", 20, 50);
+        g.drawString("Press [SPACE] to reset", 20, 65);
+        //render objects
+        g.setColor(rect0Collision ? Color.BLACK : Color.BLUE);
+        drawAABB(g, min0Cpy, max0Cpy);
+        
+        g.setColor(rect1Collision ? Color.BLACK : Color.BLUE);
+        drawAABB(g, min1Cpy, max1Cpy);
+        
+        g.setColor(circle0Collision ? Color.BLACK : Color.BLUE);
+        drawOval(g, c0, r0);
+        
+        g.setColor(circle1Collision ? Color.BLACK : Color.BLUE);
+        drawOval(g, c1, r1);
     }
 }

@@ -140,11 +140,9 @@ public class SimpleFramework extends JFrame implements Runnable{
             curTime = System.nanoTime();
             nsPerFrame = curTime - lastTime;
             gameLoop((float)(nsPerFrame / 1.0E9));
-            //233
             lastTime = curTime;
         }
         terminate();
-        //233
     }
 
     protected void initialize() {
@@ -153,14 +151,78 @@ public class SimpleFramework extends JFrame implements Runnable{
     }
 
     protected void gameLoop (float delta) {
-        //processInput(delta);
-        //updateObjects(delta);
-        //renderFrame();
-        //sleep(appSleep);
-        //233
+        processInput(delta);
+        updateObjects(delta);
+        renderFrame();
+        sleep(appSleep);
     }
 
     protected void terminate () {
-        //233
+    }
+
+    protected void processInput (float delta) {
+        keyboardInputBoolean.poll();
+        relativeMouseInputBoolean.poll();
+    }
+
+    protected void updateObjects (float delta) {
+    }
+
+    private void renderFrame () {
+        do {
+            do {
+                Graphics g = null;
+                try {
+                    g = bufferStrategy.getDrawGraphics();
+                    g.clearRect(0, 0, getWidth(), getHeight());
+                    render(g);
+                } catch (Exception e) {
+                    System.out.println(e);
+                } finally {
+                    if (g != null) {
+                        g.dispose();
+                    }
+                }
+            } while(bufferStrategy.contentsRestored());
+            bufferStrategy.show();
+        } while(bufferStrategy.contentsLost());
+    }
+
+    private void sleep(long sleep) {
+        try {
+           Thread.sleep(sleep); 
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
+
+    protected void render (Graphics g) {
+        g.setFont(appFont);
+        g.setColor(appFPSColor);
+        frameRate.calculate();
+        g.drawString(frameRate.getFrameRate(), 20, 20);
+    }
+
+    protected Matrix3x3f getViewportTransform () {
+        return Utility.createViewport(appWorldWidth, appWorldHeight, canvas.getWidth(), canvas.getHeight());
+    }
+
+    protected Matrix3x3f getReverseViewportTransform() {
+        return Utility.createReverseViewport(appWorldWidth, appWorldHeight, canvas.getWidth(), canvas.getHeight());
+    }
+
+    protected Vector2f getWorldMousePosition () {
+        Matrix3x3f screenToWorld = getReverseViewportTransform();
+        Point mousePos = relativeMouseInputBoolean.getPosition();
+        Vector2f screenPos = new Vector2f(mousePos.x, mousePos.y);
+        return screenToWorld.mul(screenPos);
+    }
+
+    protected Vector2f getRelativeWorldMousePosition () {
+        float sx = appWorldWidth / (canvas.getWidth() - 1);
+        float sy = appWorldHeight / (canvas.getHeight() - 1);
+        Matrix3x3f viewport = Matrix3x3f.scale(sx, -sy);
+        Point p = relativeMouseInputBoolean.getPosition();
+        return viewport.mul(new Vector2f(p.x, p.y));
     }
 }

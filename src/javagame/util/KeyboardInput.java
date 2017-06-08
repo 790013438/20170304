@@ -45,7 +45,7 @@ public class KeyboardInput implements KeyListener{
         return polledInt[keyCode] > 0;
     }
 
-    public boolean keyDonwOnce(int keyCode) {
+    public boolean keyDownOnce(int keyCode) {
         return polledInt[keyCode] == 1;
     }
 
