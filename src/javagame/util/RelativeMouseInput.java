@@ -119,7 +119,7 @@ public class RelativeMouseInput implements MouseListener, MouseMotionListener, M
     }
 
     public boolean buttonDownOnce(int keyInt) {
-        return polledInt[keyInt - 1] == 0;
+        return polledInt[keyInt - 1] == 1;
     }
 
     public int getNotches() {

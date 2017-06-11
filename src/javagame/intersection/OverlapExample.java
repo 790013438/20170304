@@ -44,6 +44,10 @@ public class OverlapExample extends SimpleFramework {
         appFPSColor = Color.BLACK;
     }
 
+    public static void main (String[] args) {
+        launchApp(new OverlapExample());
+    }
+
     protected void initialize () {
         super.initialize();
         mousePos = new Vector2f();
@@ -114,7 +118,7 @@ public class OverlapExample extends SimpleFramework {
         }
         rect1Moving = rect1Moving && dragging;
         if (rect1Moving) {
-            rect1Pos = rect0Pos.add(mouseDelta);
+            rect1Pos = rect1Pos.add(mouseDelta);
         }
         circle0Moving = circle0Moving && dragging;
         if (circle0Moving) {
