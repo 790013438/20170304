@@ -69,7 +69,7 @@ public class SimpleFramework extends JFrame implements Runnable{
         canvas = new Canvas();
         //The background color of the main game area.
         canvas.setBackground(appBackground);
-        //The Component.setIgnoreRePaint() method takes crea of ignoring extra paint messages.
+        //The Component.setIgnoreRePaint() method takes care of ignoring extra paint messages.
         canvas.setIgnoreRepaint(true);
         getContentPane().add(canvas);
         setLocationByPlatform(true);

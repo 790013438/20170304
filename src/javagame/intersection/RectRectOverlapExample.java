@@ -30,6 +30,29 @@ public class RectRectOverlapExample extends SimpleFramework{
         rect1Pos = getWorldMousePosition();
     }
 
+    /**
+     * The updateObjects() method copies each rectangle and then translates and rotates 
+     * them so they can be tested for overlap.
+     */
+    protected void updateObjects () {
+    }
+
+    /**
+     * The rectRectIntersection() method computes the center of each rectangle,
+     * the four point axis values, and the width and height of each rectangle.
+     * The sum of each width and height are compared to the distance of each center.
+     * If they do not overlap, then the objects do not overlap.
+     */
+    protected void rectRectIntersection () {
+    }
+
+    /**
+     * The render() method transforms the rectangles to screen corrdinates and draws the rectangles in blue if they overlap,
+     * and black otherwise.
+     */
+    protected void render () {
+    }
+
     public static void main (String[] args) {
         launchApp(new RectRectOverlapExample());
     }

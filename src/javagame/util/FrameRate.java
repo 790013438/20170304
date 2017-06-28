@@ -10,9 +10,11 @@ public class FrameRate {
     private long deltaLong;
     private int frameCountInt;
 
-    //The initalize() method needs to be called before the frame rate measurements begin.
+    //The initialize() method needs to be called before the frame rate measurements begin.
     //This method initializes the frame rate string to 0, and the last time to the current time in  milliseconds.
     public void initialize() {
+        frameRateString = "FPS 0";
+        lastTimeLong = System.currentTimeMillis();
     }
 
     public void calculate() {
