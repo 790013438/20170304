@@ -1,14 +1,27 @@
 package javagame.intersection;
 
-import java.util.Scanner;
-
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
-public class Fragment {
+public class Day3 {
+    
     public static void main (String[] args) {
+        First first = new First();
+        first.method();
     }
-
+    
+    static class First {
+        public void method () {
+            int sum = 0;
+            int i = 0;
+            while (sum < 20) {
+                i++;
+                sum += i;
+            }
+            System.out.println(i);
+        }
+    }
+    
     static class Average {
         public void method () {
             SwingUtilities.invokeLater(new Runnable() {
@@ -34,4 +47,5 @@ public class Fragment {
             });
         }
     }
+    
 }
