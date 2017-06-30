@@ -47,7 +47,7 @@ public class RectRectOverlapExample extends SimpleFramework{
     }
 
     /**
-     * The render() method transforms the rectangles to screen corrdinates and draws the rectangles in blue if they overlap,
+     * The render() method transforms the rectangles to screen coordinates and draws the rectangles in blue if they overlap,
      * and black otherwise.
      */
     protected void render () {
