@@ -1,2 +1,3 @@
-//Selection and Repetition Control.  Table A.4 shows the Java control statements for selection and repetition. (Java uses the same syntax for control structures as do C and C++.) We assume that you are familiar with basic programming control structures from your first course, so we won’t dwell on them here. We will discuss the enhanced for statement in Chapter 2.
-//552
+//Methods and Class Math.  Java programmers can use methods to define a group of statements that perform a particular operation. Methods are very similar to functions in other programming languages such as C and C++. The Java method minChar that follows returns the character with the smaller 
+//Unicode value. The statements beginning with keyword return cause an exit from the
+//method; the expression following return is the method result.
