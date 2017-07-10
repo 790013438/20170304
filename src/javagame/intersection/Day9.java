@@ -2,10 +2,19 @@ package javagame.intersection;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
+import java.util.Arrays;
 
 public class Day9 {
     
     public static void main (String[]args) {
+        
+        String personData = "Doe, John 5/15/65";
+        String[] tokens = personData.split("[,\\s/]+");
+        System.out.println(Arrays.toString(tokens) + "\t" + tokens.length);
+        
+        String line = "Doe, John 5/15/65";
+        String[] words = line.split("[^\\p{L}\\p{N}]+");
+        System.out.println(Arrays.toString(words));
 
         Day9 day9 = new Day9();
         /**
