@@ -1,5 +1,11 @@
 package javagame.intersection;
 
+import org.omg.SendingContext.RunTime;
+import sun.util.resources.en.CalendarData_en_GB;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Scanner;
 
 /**
@@ -72,6 +78,34 @@ public class Day10_2 {
      */
     
     public static void main (String[] args) {
+        
+        Calendar calendar = Calendar.getInstance();
+        System.out.println(calendar.getFirstDayOfWeek());
+        
+    
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy年MM月dd日 hh:mm");
+        String dateString = "2007年03月29日 13:30";
+        Date date = new Date();
+        try {
+            date = simpleDateFormat.parse(dateString);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        System.out.println(date);
+        
+        
+//        java.util.Properties properties = System.getProperties();
+//        properties.list(System.out);
+//        Runtime runtime = Runtime.getRuntime();
+//        String[] var1 = {"notepad"};
+//        String[] var2 = {"Day10_1.java"};
+//        try {
+//            Process process = runtime.exec(var1, var2);
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+        
+        java.util.Date newDate = new java.util.Date();
         /**
          * 1、有一段歌词，每句都以空格“  ”结尾，请将歌词每句按行输出
          */
