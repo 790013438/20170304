@@ -5,7 +5,11 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalAdjusters;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Random;
+import java.util.function.*;
 
 
 /**
@@ -60,9 +64,9 @@ public class Day11 {
          * java8的新内容
          */
         public void method () {
-            LocalDate localDate = LocalDate.now();
             System.out.println("当前时间距离北京奥运会(2018年1月1日)相距的天数");
-            System.out.println(ChronoUnit.DAYS.between(localDate, LocalDate.of(2018, Month.JANUARY, 1)));
+            LocalDate localDate = LocalDate.now();
+            System.out.println(ChronoUnit.DAYS.between(localDate, LocalDate.of(2017, Month.JULY, 14)));
         }
 
     }
@@ -157,7 +161,8 @@ public class Day11 {
     class Seventh {
         
         public void method () {
-//            LocalDate localDate = LocalDate.parse()
+            LocalDate localDate = LocalDate.ofEpochDay(3);
+            System.out.println(localDate.getDayOfWeek());
         }
         
     }
@@ -179,6 +184,28 @@ public class Day11 {
         
         Fifth fifth = day11.new Fifth();
         fifth.method();
+        
+        Seventh seventh = day11.new Seventh();
+        seventh.method();
+        
+        Integer[] intArray = {13, 23, 2, 1, 34, 12, 98, 24};
+        Arrays.sort(intArray, (o1, o2) -> {return o2 - o1;});
+        System.out.println(Arrays.toString(intArray));
+        
+        BiPredicate<String, String> biPredicate = String::equals;
+        boolean b = biPredicate.test("New", new String("New"));
+        System.out.println(b);
+        
+        Function<String, StringBuffer> fun1 = (n) -> {return new StringBuffer(n);};
+        Function<String, StringBuffer> fun2 = StringBuffer::new;
+        System.out.println(fun2.apply("qwerty"));
+        
+        Collection arrayList = new ArrayList();
+        for (int i = 0; i < 3; ++i) {
+            arrayList.add("qwerty");
+        }
+        System.out.println(arrayList);
+        
     }
     
 }
