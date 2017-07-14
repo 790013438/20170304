@@ -46,6 +46,8 @@ public class CallableTaskExample implements Callable<Boolean> {
                      */
                     Future<Boolean> resultFuture = executorService.submit(new CallableTaskExample());
                     /**
+                     * The Future object returned from the executor has a get() method that will block 
+                     * until the Callable task has finished.
                      */
                     Boolean successBoolean = resultFuture.get();
                     System.out.println("Result:" + successBoolean);
@@ -67,6 +69,7 @@ public class CallableTaskExample implements Callable<Boolean> {
                  */
                 executorService.shutdown();
                 executorService.awaitTermination(10, TimeUnit.SECONDS);
+                System.out.println("Threadpool Shutdown :)");
             } catch (InterruptedException e) {
                 //at this point,just give up..
                 e.printStackTrace();
@@ -96,6 +99,7 @@ public class CallableTaskExample implements Callable<Boolean> {
             Thread.sleep(seconds * 100);
         } catch (InterruptedException e) {
         } catch (Exception e) {
+            System.out.println(e);
         }
         //even = true, odd = false;
         return (seconds & 1) == 0;

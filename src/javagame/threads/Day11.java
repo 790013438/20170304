@@ -8,7 +8,13 @@ import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.function.*;
 
 
@@ -167,7 +173,108 @@ public class Day11 {
         
     }
     
+    interface Repeat {
+        void repeatMethod();
+    }
+    
+    interface Duplicate {
+        void method();
+    }
+    
+    final static class Eighth implements Repeat, Duplicate {
+        
+        @Override
+        public void method () {
+            System.out.println("duplicate");
+        }
+        
+        @Override
+        public void repeatMethod () {
+            System.out.println("repeat");
+        }
+    }
+    
+    class queue {
+        
+        private LinkedList<Integer> linkedList = new LinkedList<>();
+        
+        public int pop () {
+            if (linkedList.isEmpty())
+                return 0;
+            return linkedList.removeFirst().intValue();
+        }
+    }
+    
+    static class Person {
+        
+        private String name;
+        private int age;
+    
+        public Person() {
+        }
+    
+        public Person(String name, int age) {
+            this.name = name;
+            this.age = age;
+        }
+    
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+        
+            Person person = (Person) o;
+        
+            if (age != person.age) return false;
+            return name != null ? name.equals(person.name) : person.name == null;
+        }
+    
+        @Override
+        public int hashCode() {
+            int result = name != null ? name.hashCode() : 0;
+            result = 31 * result + age;
+            return result;
+        }
+    
+        @Override
+        public String toString() {
+            return "Person{" +
+                    "name='" + name + '\'' +
+                    ", age='" + age + '\'' +
+                    '}';
+        }
+        
+        
+    }
+    
     public static void main (String[] args) {
+        
+        Set set = new HashSet();
+        set.add(new Person());
+        Set treeSet = new TreeSet<Integer>();
+        Random random = new Random();
+        for (int i = 0; i < 6; i++) {
+            int integer = random.nextInt(9);
+            System.out.println(integer);
+            treeSet.add(integer);
+        }
+        System.out.println(treeSet);
+        
+        Eighth eighth = new Eighth();
+        Repeat repeat;
+        Duplicate duplicate;
+        repeat = eighth;
+        repeat.repeatMethod();
+        eighth = (Eighth) repeat;
+        duplicate = eighth;
+        duplicate.method();
+        
+        Collection arrayList = new ArrayList();
+        Iterator iterator = arrayList.iterator();
+        while (iterator.hasNext()) {
+            System.out.println(iterator.next());
+            System.out.println("qwerty");
+        }
     
         Day11 day11 = new Day11();
         First first = day11.new First();
@@ -200,12 +307,19 @@ public class Day11 {
         Function<String, StringBuffer> fun2 = StringBuffer::new;
         System.out.println(fun2.apply("qwerty"));
         
-        Collection arrayList = new ArrayList();
+        arrayList = new ArrayList();
         for (int i = 0; i < 3; ++i) {
             arrayList.add("qwerty");
         }
         System.out.println(arrayList);
         
+        List arrayList2 = new ArrayList();
+        arrayList2.add("qwerty");
+        
+        arrayList2.iterator();
+//        arrayList.listIterator();
+        arrayList2.listIterator();
+        arrayList.size();
     }
     
 }

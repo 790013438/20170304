@@ -1,15 +1,28 @@
-
+import java.util.Arrays;
 
 public class Arrangement {
     
     public static void main (String[] args) {
         First first = new First();
-        first.method();        
+        
+        int[] array = {1, 2, 3};
+        first.arrange(array, 0, array.length - 1);
     }
 
     static class First {
         
         private int count = 0;
+        
+        public void arrange (int[] array, int leftIndex, int rightIndex) {
+            if (leftIndex == rightIndex) {
+                System.out.println(Arrays.toString(array));
+            }
+            for (int i = leftIndex; i <= rightIndex && message("leftIndex:" + leftIndex + " i <= rightIndex " + i+ " <= "  + rightIndex + " : ", i <= rightIndex, array); ++i) {
+                swap(array, leftIndex, i);
+                arrange(array, leftIndex + 1, rightIndex);
+                swap(array, leftIndex, i);
+            }
+        }
         
         public void method () {
             int[] array = {1, 2};
@@ -23,13 +36,8 @@ public class Arrangement {
         
         public void print (int[] array, int leftIndex, int rightIndex) {
             if (leftIndex == rightIndex) {
-                for (int i = 0; i < array.length; ++i) {
-                    System.out.print(array[i]);
-                }
-                //2
+                System.out.println(Arrays.toString(array));
                 count++;
-                //233
-                System.out.println();
             }
             for (int i = rightIndex; leftIndex <= i && message("leftIndex <= i " + leftIndex + " <= "  + i + " : ", leftIndex <= i, array); --i) {
                 swap(array, leftIndex, i);
@@ -47,18 +55,13 @@ public class Arrangement {
         //2
         private boolean message (String passedString, boolean arg0, int[] array) {
             System.out.print(passedString + arg0 + " ");
-            for (int i = 0; i < array.length; ++i) {
-                System.out.print(array[i] + ", ");
-            }
-            System.out.println();
+            System.out.println(Arrays.toString(array));
             return true;
         }
         
         public void arrangement (int[] array, int leftIndex, int rightIndex) {
             if (leftIndex == rightIndex) {
-                for (int i = 0; i < array.length; ++i) {
-                    System.out.print(array[i]);
-                }
+                System.out.println(Arrays.toString(array));
                 System.out.println();
             }
 //            for (int i = leftIndex; i <= rightIndex && message("i <= rightIndex " + i + " <= "  + rightIndex + " : ", i <= rightIndex, array); ++i) {
