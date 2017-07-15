@@ -1,20 +1,130 @@
 package javagame.threads;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.StringJoiner;
 
 /**
  * Created by 79001 on 2017/7/13.
  */
 public class Day13 {
     
+    <T> T get(T obj) {
+        return obj;
+    }
+    
+    class Eighth<E> {
+        
+        public E get (E o) {
+            return o;
+        }
+        
+        public E plus (E o) {
+            return o;
+        }
+    }
+    
+    class Ninth {
+        public void method () {
+            String string = "Doe, John 5/15/65";
+            String[] tokens = string.split("[\\p{Z},/]+");
+            System.out.println(Arrays.toString(tokens));
+            System.out.println(string.indexOf(", "));
+            System.out.println(string.indexOf("/"));
+        }
+    }
+    
     public static void main (String[] args) {
-        StringBuilder stringBuilder = new StringBuilder("happy");
+        Day13 day13 = new Day13();
+//        individual tokens
+        Ninth ninth = day13.new Ninth();
+        ninth.method();
+        
+        //What is stored in result
+        StringBuilder result = new StringBuilder();
+        String sentence = "Let's all learn how to program in Java";
+        String[] tokens = sentence.split("\\s+");
+        for (String token : tokens) {
+            result.append(token).append("\n");
+        }
+        System.out.println(result);
+        
+//        rewrite
+        StringJoiner stringJoin = new StringJoiner(", ");
+        String[] array = "Elliot Koffman".split("\\p{Z}");
+        for (int i = array.length - 1; i >= 0; --i) {
+            stringJoin.add(array[i]);
+        }
+        System.out.println(stringJoin);
+        
+        //rewrite
+        StringBuilder myName = new StringBuilder("Elliot Koffman");
+        StringBuilder myNameFirstLast = myName;
+        myName = new StringBuilder(myName.substring(7)).append(", ").append(myName.substring(0, 6));
+        System.out.println(myName);
+        
+//        extract the words in the string "Nancy* has thirty-three*** fine!! teeth."
+        String string = "Nancy* has thirty-three*** fine!! teeth.";
+        System.out.println(Arrays.toString(string.split("[\\p{P}\\p{Z}]+")));
+        
+//        Evaluate each of these expressions.
+        System.out.println("happy".equals("Happy"));
+        System.out.println("happy".compareTo("Happy"));
+        System.out.println("happy".equalsIgnoreCase("Happy"));
+        System.out.println("happy".equals("happy".charAt(0) + "Happy".substring(1)));
+        System.out.println("happy" == "happy".charAt(0) + "Happy".substring(1));
+        
+
+        CharSequence character = new String();
+//        泛型
+        System.out.println(day13.get("qwerty"));
+        Eighth<String> eighth = day13.new Eighth();
+        eighth.get("qwerty");
+        
+//        Collections
+        System.out.println(Collections.EMPTY_LIST);
+        
+        List<Student> arrayList = new ArrayList();
+        arrayList.add(day13.new Student("qwerty", 192));
+        arrayList.add(day13.new Student("Dick", 35));
+        arrayList.add(day13.new Student("Tom", 23));
+        arrayList.add(day13.new Student("om", 23));
+        arrayList.add(day13.new Student("m", 23));
+        arrayList.add(day13.new Student("cm", 23));
+        System.out.println(Collections.binarySearch(arrayList, day13.new Student("qwerty", 12), new Comparator<Student>() {
+            @Override
+            public int compare (Student o1, Student o2) {
+                return o1.age - o2.age;
+            }
+        }));
+        Collections.sort(arrayList);
+        System.out.println(arrayList);
+    
+        String[] names = {"Tom", "Dick", "Harry"};
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(names[0]);
+        for (int i = 1 ; i < names.length; ++i) {
+            stringBuilder.append(", ");
+            stringBuilder.append(names[i]);
+        }
+        String results = stringBuilder.toString();
+        System.out.println(result);
+        StringJoiner stringJoiner = new StringJoiner(", ", "[", "]");
+        for (int i = 0; i < names.length; ++i) {
+            stringJoiner.add(names[i]);
+        }
+        results = stringJoiner.toString();
+        System.out.println(result);
+        System.out.println("%n");
+        
         System.out.println(stringBuilder.capacity());
         stringBuilder.append("day me");
         stringBuilder.insert(9, "to ");
@@ -43,7 +153,7 @@ public class Day13 {
         }
     }
     
-    class Student {
+    class Student implements Comparable{
         private String name;
         private int age;
     
@@ -55,7 +165,24 @@ public class Day13 {
             this.age = age;
         }
     
+        public String getName() {
+            return name;
+        }
+    
+        public void setName(String name) {
+            this.name = name;
+        }
+    
+        public int getAge() {
+            return age;
+        }
+    
+        public void setAge(int age) {
+            this.age = age;
+        }
+    
         @Override
+        
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
@@ -71,6 +198,23 @@ public class Day13 {
             int result = name != null ? name.hashCode() : 0;
             result = 31 * result + age;
             return result;
+        }
+    
+        @Override
+        public String toString() {
+            return "Student{" +
+                    "name='" + name + '\'' +
+                    ", age=" + age +
+                    '}';
+        }
+    
+        @Override
+        public int compareTo(Object o) {
+            if (o.getClass() == getClass()) {
+                Student other = (Student)o;
+                return age - other.getAge();
+            }
+            return 0;
         }
     }
     

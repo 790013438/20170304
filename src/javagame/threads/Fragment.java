@@ -1,7 +1,4 @@
- PITFALL.
-String Index Out of Bounds
-If an index supplied to any String, StringBuilder, or StringBuffer method is outside
-the valid range of character positions for the string object (i.e., if the index is less than 0
-or greater than or equal to the string length), a StringIndexOutOfBounds‐Exception will
-occur. This is a run‐time error and will terminate program execution. We will discuss
-exceptions in more detail in Section A.11.
+Wrapper Classes for Primitive Types
+We have seen that the primitive numeric types are not objects, but sometimes we need to process primitive‐type data as objects. For example, we may want to pass a numeric value to a method that requires an object as its argument. Java provides a set of classes called wrapper classes whose objects contain primitive‐type values: Float, Double, Integer, Boolean, Character, and so on. These classes provide constructor methods to create new objects that “wrap” a specified value. They also provide methods to “unwrap,” or extract, an object’s value and methods to compare two objects. Table A.13 shows some methods for wrapper class Integer (part of java.lang). The other numeric wrapper classes also provide these methods, except that method parseInt is replaced by a method parseClassType, where ClassType is the data type wrapped by that class.  In earlier versions of Java, a programmer could not mix type int values and type Integer objects in an expression. If you wanted to increment the value stored in Integer object nInt, you would have to unwrap the value, increment it, and then wrap the value in a new Integer object:
+int n = nInt.intValue();
+nInt = new Integer(n++);
