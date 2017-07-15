@@ -44,6 +44,10 @@ public class Day13 {
     
     public static void main (String[] args) {
         Day13 day13 = new Day13();
+        char ch = 'a';
+        System.out.println(new Character(ch).toString());
+        System.out.println("" + ch);
+        System.out.println(new StringBuilder().append(ch).toString());
 //        individual tokens
         Ninth ninth = day13.new Ninth();
         ninth.method();
