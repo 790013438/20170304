@@ -370,6 +370,7 @@ public class Day13Map {
         private static String[] orderString = {"3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K", "A", "2", "小怪", "大怪"};
         private static String order = "\"3\", \"4\", \"5\", \"6\", \"7\", \"8\", \"9\", \"10\", \"J\", \"Q\", \"K\", \"A\", \"2\", \"小怪\", \"大怪\"";
         private static String[] color = {"♠", "♥", "♣", "♦"};
+        private static String order2 = "\"♠\", \"♥\", \"♣\", \"♦\"";
         private List<String> arrayList = new ArrayList<>();
         
         private Poker () {
@@ -408,7 +409,10 @@ public class Day13Map {
                     if (s2.equals("小怪")) {
                         return -1;
                     }
-                    return order.indexOf(s1.charAt(0)) - order.indexOf(s2.charAt(0));
+                    if (order.indexOf(s1.charAt(0)) != order.indexOf(s2.charAt(0))) {
+                        return order.indexOf(s1.charAt(0)) - order.indexOf(s2.charAt(0));
+                    }
+                    return order2.indexOf(s1.charAt(1)) - order2.indexOf(s2.charAt(1));
                 }
             });
         }
@@ -431,8 +435,8 @@ public class Day13Map {
 //        worldCup.initialize();
 //        worldCup.method();
         
-        Count count = day13Map.new Count("qwertyqwerqwer");
-        count.method();
+//        Count count = day13Map.new Count("qwertyqwerqwer");
+//        count.method();
         
         Fourth fourth = day13Map.new Fourth();
         fourth.method();

@@ -59,7 +59,9 @@ public class DiscManager implements Runnable {
     
         @Override
         public String toString() {
-            return "\t" + name + '\t' +  state + "\t"+ date + '\n';
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            return "\t" + name + '\t' +  state + "\t"+ calendar.get(Calendar.YEAR) + "-" + calendar.get(Calendar.MONTH) + "-" + calendar.get(Calendar.DAY_OF_MONTH)+ '\n';
         }
     }
     
@@ -81,16 +83,18 @@ public class DiscManager implements Runnable {
                 add();
                 break;
             case 2:
-                System.out.println("qwerty");
+                traversal();
                 break;
             case 3:
-                System.out.println("qwerty");
+                remove("");
                 break;
             case 4:
-                System.out.println("qwerty");
+                lend();
+//                System.out.println("功能开发中...");
                 break;
             case 5:
-                System.out.println("qwerty");
+                returnDisc();
+//                System.out.println("功能开发中...");
                 break;
             case 6:
                 close();
@@ -124,6 +128,9 @@ public class DiscManager implements Runnable {
         discs[0] = new Disc("罗马假日", 0, calendar.getTime());
         discs[1] = new Disc("风声鹤唳", 1);
         discs[2] = new Disc("浪漫满屋", 1);
+        for (int i = 0 ; i < 3; ++i) {
+            hashMap.put(discs[i].name, discs[i]);
+        }
     }
     
     public void close () {
@@ -159,19 +166,22 @@ public class DiscManager implements Runnable {
             System.out.println("录入DVD名称：");
             try {
                 enterString = scanner.next();
-            } catch (Exception e) {
+            } catch (Exception e) {}
+            if (hashMap.containsKey(enterString)) {
+                System.out.println("录入失败");
+            } else {
+                Disc disc = new Disc(enterString, 1);
+                hashMap.put(disc.name, disc);
+                System.out.println("录入成功");
+                System.out.println("\tname" + "\tState" + "\tdate\n");
+                System.out.println(hashMap.values());
             }
-            Disc disc = new Disc(enterString, 1);
-            hashMap.put(disc.name, disc);
-            System.out.println("录入成功");
-            System.out.println("\tname" + "\tState" + "\tdate\n");
-            System.out.println(hashMap.values());
             System.out.println("输入0返回");
         }
     }
 
     public Disc search (String name) {
-        return new Disc();
+        return hashMap.get(name);
     }
 
     public void search () {
@@ -186,14 +196,47 @@ public class DiscManager implements Runnable {
 
     //移除
     public Disc remove (String string) {
-        return hashMap.remove(string);
+        System.out.println("请输入要删除的DVD");
+        try {
+            string = scanner.next();
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        Disc disc = hashMap.remove(string);
+        if (disc == null) {
+            System.out.println("想要删除的DVD不存在");
+        }
+        return disc;
     }
     
     //借出 修改值
     public void lend () {
+        System.out.println("输入要借的DVD");
+        String enterString = "";
+        try {
+            enterString = scanner.next();
+            Disc disc = hashMap.get(enterString);
+            if (disc == null) {
+                System.out.println("要借的DVD不存在");
+                return;
+            }
+            System.out.println(disc.state);
+            //233
+            if (disc.state == 1) {
+                disc.state = 0;
+                hashMap.put(disc.name, disc);
+                System.out.println("借出成功");
+            } else {
+                System.out.println("该DVD已经借出");
+                System.out.println(disc.toString());
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
     }
 
-    public void returnDis () {
+    public void returnDisc () {
+        add();
     }
     
     public static void main (String[] args) {

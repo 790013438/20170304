@@ -1,5 +1,10 @@
 package javagame.threads;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+
 /**
  * Created by 79001 on 2017/7/16.
  */
@@ -84,7 +89,25 @@ public class Saturday3 {
     class Third {
         
         public void method () {
-        
+            String s = "ljf55dfal12sdjflkas88djfa43a899";
+            //提取数字字符长
+            String[] stringArray = s.split("\\D+");
+            //解析成数字
+            List<Integer> arrayList = new ArrayList<>();
+            for (int i = 0; i < stringArray.length; ++i) {
+                if (!"".equals(stringArray[i])) {
+                    arrayList.add(Integer.parseInt(stringArray[i]));
+                }
+            }
+            
+            //排序
+            arrayList.sort(new Comparator<Integer>() {
+                @Override
+                public int compare(Integer o1, Integer o2) {
+                    return o1 - o2;
+                }
+            });
+            System.out.println(arrayList);
         }
         
     }
@@ -97,6 +120,9 @@ public class Saturday3 {
         
         Second second = saturday3.new Second();
         second.method();
+        
+        Third third = saturday3.new Third();
+        third.method();
     }
     
 }
