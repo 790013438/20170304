@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -421,6 +422,16 @@ public class Day13Map {
     
     public static void main (String[] args) {
         Day13Map day13Map = new Day13Map();
+        
+        Scanner scanner = new Scanner(System.in);
+        try {
+            System.out.println("请输入一个整数");
+            int i = scanner.nextInt();
+            System.out.println("输入另一个");
+            System.out.println(i + scanner.nextInt());
+        } catch (InputMismatchException e) {
+            e.printStackTrace();
+        }
         
 //        First first = day13Map.new First();
 //        first.method();

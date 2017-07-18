@@ -44,7 +44,8 @@ public class SimpleFramework extends JFrame implements Runnable{
     protected static void launchApp(final SimpleFramework  simpleframework) {
         simpleframework.addWindowListener(new WindowAdapter(){
             //处理退出
-            public void WindowClosing(WindowEvent e) {
+            @Override
+            public void windowClosing(WindowEvent e) {
                 simpleframework.onWindowClosing();
             }
         });

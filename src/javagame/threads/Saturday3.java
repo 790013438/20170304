@@ -3,7 +3,9 @@ package javagame.threads;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Scanner;
 
 /**
  * Created by 79001 on 2017/7/16.
@@ -72,11 +74,10 @@ public class Saturday3 {
             //从后往前插
             for (int i = stringBuilder.length(); i > 0; --i) {
                 //转成小写
-                String str = new Character(string.charAt(i - 1)).toString();
-                str = str.toLowerCase();
+                Character character = Character.toLowerCase(string.charAt(i - 1));
                 
                 //插入
-                stringBuilder.insert(i, "(" + str + ")");
+                stringBuilder.insert(i, "(" + character + ")");
             }
             System.out.println(stringBuilder);
         }
@@ -112,17 +113,65 @@ public class Saturday3 {
         
     }
     
+    class Fourth {
+        private int i = 0;
+    
+        public int getI() {
+            return i;
+        }
+    
+        public void setI(int i) {
+            this.i = i;
+        }
+    }
+    
+    public void method (Fourth fourth) {
+        fourth.setI(3);
+    }
+    
+    volatile static boolean volatileRunningBoolean = true;
     public static void main (String[] args) {
         Saturday3 saturday3 = new Saturday3();
+        Fourth fourth = saturday3.new Fourth();
+        saturday3.method(fourth);
+        System.out.println(fourth.getI());
+    
+//        Scanner scanner = new Scanner(System.in);
+//
+//        int[] intArray = new int[5];
+//        try {
+//            for (int i = 0; i < 5; ++i) {
+//                System.out.println("请输入一个整数");
+//                intArray[i] = scanner.nextInt();
+//            }
+//            throw new ArithmeticException("qwerty");
+//        } catch (InputMismatchException e) {
+//            e.printStackTrace();
+//        } catch (Exception e) {
+//            System.out.println(e);
+//            e.printStackTrace();
+//        }
         
-        First first = saturday3.new First();
-        first.method();
-        
-        Second second = saturday3.new Second();
-        second.method();
-        
-        Third third = saturday3.new Third();
-        third.method();
+//        while (volatileRunningBoolean) {
+//            try {
+//                String enterString = scanner.next();
+//                int integer = Integer.parseInt(enterString);
+//                System.out.println(integer);
+//                volatileRunningBoolean = false;
+//            } catch (Exception e) {
+//                System.out.println("重新输入");
+//            }
+//        }
+
+//
+//        First first = saturday3.new First();
+//        first.method();
+//
+//        Second second = saturday3.new Second();
+//        second.method();
+//
+//        Third third = saturday3.new Third();
+//        third.method();
     }
     
 }
