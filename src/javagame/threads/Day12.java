@@ -1,10 +1,18 @@
 package javagame.threads;
 
+import java.io.DataInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.TreeSet;
@@ -643,6 +651,46 @@ public class Day12 {
         }
     
     }
+    
+    /**
+     * PrintStream,
+     * DateOutputStream
+     */
+    class Sixth {
+        File file = new File("e://qwerty.txt");
+    
+        public void method () {
+            try {
+                FileInputStream fileInputStream = new FileInputStream(file);
+                DataInputStream dateInputStream = new DataInputStream(fileInputStream);
+                PrintStream printStream = new PrintStream(file);
+                PrintWriter printWriter = new PrintWriter(file);
+            } catch (FileNotFoundException e) {
+                System.out.println(e);
+            }
+        }
+        
+        public void printRandom () {
+            
+            try {
+                PrintStream printStream = new PrintStream(file);
+                System.setOut(printStream);
+                Random random = new Random();
+                
+                for (int i = 0; i < 100; ++i) {
+                    if (i % 6 == 0 && i != 0) {
+                        printStream.println();
+                    }
+                    printStream.print(random.nextInt(101) + 100 + ", ");
+                }
+                
+            } catch (FileNotFoundException e) {
+                System.out.println(e);
+            }
+            
+        }
+    }
+    
 
     public static void main (String[] args) {
         
@@ -655,8 +703,11 @@ public class Day12 {
          * （3）创建一个Collection集合的对象，将Person对象添加到Collection集合中。
          * (5) 删除重复的对象。如果姓名和年龄都相同则认为对象重复了
          */
-        First first = day12.new First();
-        first.method();
+//        First first = day12.new First();
+//        first.method();
+        
+        Sixth sixth = day12.new Sixth();
+        sixth.method();
         
     }
 

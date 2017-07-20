@@ -1,7 +1,13 @@
 package javagame.intersection;
 
+import javagame.util.Matrix3x3f;
 import javagame.util.SimpleFramework;
+import javagame.util.Utility;
 import javagame.util.Vector2f;
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.util.Arrays;
 
 /**
  * To project the radius onto an axis, a single vector to the corner cannot be used,
@@ -12,13 +18,40 @@ public class RectRectOverlapExample extends SimpleFramework{
 
     private Vector2f[] rect;
     private Vector2f[] rect0;
+    private Vector2f rect0Pos;
+    private float rect0Angle;
+    private Vector2f[] rect1;
     private Vector2f rect1Pos;
+    private float rect1Angle;
+    private boolean intersection;
 
     /**
      * Each rectangle testing for overlap has an array of points, 
      * a position, and a rotation in radians.
      * The intersection variable holds the state of the separating axis test.
      */
+    public RectRectOverlapExample () {
+        appWidth = 640;
+        appHeight = 640;
+        appSleep = 10L;
+        appTitle = "Rect Rect Overlap";
+        appBackground = Color.WHITE;
+        appFPSColor = Color.BLACK;
+    }
+
+    @Override
+    protected void initialize() {
+        super.initialize();
+        //set up rectangles for testing
+        rect = new Vector2f[] {new Vector2f(-0.25f, 0.25f), new Vector2f(0.25f, 0.25f), 
+            new Vector2f(0.25f, -0.25f), new Vector2f(-0.25f, -0.25f)};
+        rect0 = new Vector2f[rect.length];
+        rect0Pos = new Vector2f();
+        rect0Angle = 0.0f;
+        rect1 = new Vector2f[rect.length];
+        rect1Pos = new Vector2f();
+        rect1Angle = 0.0f;
+    }
 
     /**
      * The processInput() method moves the second rectangle around using the mouse position.
@@ -28,13 +61,43 @@ public class RectRectOverlapExample extends SimpleFramework{
         super.processInput(delta);
         //convert mouse coordinate for testing
         rect1Pos = getWorldMousePosition();
+        //rotate rectangles
+        if (keyboardInputBoolean.keyDown(KeyEvent.VK_A)) {
+            rect0Angle += (float)(Math.PI / 4.0 * delta);
+        }
+        if (keyboardInputBoolean.keyDown(KeyEvent.VK_S)) {
+            rect0Angle -= (float)(Math.PI / 4.0 * delta);
+        }
+        if (keyboardInputBoolean.keyDown(KeyEvent.VK_Q)) {
+            rect1Angle += (float)(Math.PI / 4.0 * delta);
+        }
+        if (keyboardInputBoolean.keyDown(KeyEvent.VK_W)) {
+            rect1Angle -= (float)(Math.PI / 4.0 * delta);
+        }
     }
 
     /**
      * The updateObjects() method copies each rectangle and then translates and rotates 
      * them so they can be tested for overlap.
      */
-    protected void updateObjects () {
+    @Override
+    protected void updateObjects (float delta) {
+        super.updateObjects(delta);
+        //translate objects
+        Matrix3x3f matrix3x3f = Matrix3x3f.identity();
+        matrix3x3f = matrix3x3f.mul(Matrix3x3f.rotate(rect0Angle));
+        matrix3x3f = matrix3x3f.mul(Matrix3x3f.translate(rect0Pos));
+        for (int i = 0; i < rect.length; ++i) {
+            rect0[i] = matrix3x3f.mul(rect[i]);
+        }
+        matrix3x3f = Matrix3x3f.identity();
+        matrix3x3f = matrix3x3f.mul(Matrix3x3f.rotate(rect1Angle));
+        matrix3x3f = matrix3x3f.mul(Matrix3x3f.translate(rect1Pos));
+        for (int i = 0; i < rect.length; ++i) {
+            rect1[i] = matrix3x3f.mul(rect[i]);
+        }
+        //test for intersection
+        intersection = rectRectIntersection(rect0, rect1);
     }
 
     /**
@@ -82,7 +145,7 @@ public class RectRectOverlapExample extends SimpleFramework{
         DB = D2 * Math.abs(N2.dot(N1));
         DB += D3 * Math.abs(N3.dot(N1));
 
-        if (DA + DB < Math.abs(C.dot(N2))) {
+        if (DA + DB < Math.abs(C.dot(N1))) {
             return false;
         }
 
@@ -109,7 +172,23 @@ public class RectRectOverlapExample extends SimpleFramework{
      * The render() method transforms the rectangles to screen coordinates and draws the rectangles in blue if they overlap,
      * and black otherwise.
      */
-    protected void render () {
+    protected void render (Graphics g) {
+        super.render(g);
+        //render instructions
+        g.drawString("Intersection:" + intersection, 20, 35);
+        g.drawString("A,S keys to rotate rect 1", 20, 50);
+        g.drawString("Q,W keys to rotate rect 2", 20, 65);
+        //draw rectangles
+        g.setColor(intersection ? Color.BLUE : Color.BLACK);
+        Matrix3x3f view = getViewportTransform();
+        for (int i = 0; i < rect0.length; ++i) {
+            rect0[i] = view.mul(rect0[i]);
+        }
+        Utility.drawPolygon(g, rect0);
+        for (int i = 0; i < rect1.length; ++i) {
+            rect1[i] = view.mul(rect1[i]);
+        }
+        Utility.drawPolygon(g, rect1);
     }
 
     public static void main (String[] args) {

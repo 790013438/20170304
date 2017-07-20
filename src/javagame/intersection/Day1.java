@@ -1,11 +1,103 @@
 package javagame.intersection;
 
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Scanner;
+
 public class Day1 {
+    
+//    public void delete (File file) {
+//        if (file.listFiles() != null ) {
+//            for (File f : file.listFiles()) {
+//                if (f.isDirectory()) {
+//                    delete(f);
+//                }
+//                try {
+//                    f.delete();
+//                } catch (Exception e) {
+//                    System.out.println(e);
+//                }
+//            }
+//        }
+//        file.delete();
+//    }
+    
     public static void main (String[] args) {
-        First first = new First();
-        first.method();
-        Second second = new Second();
-        second.method();
+        
+        final Day1 day1 = new Day1();
+        
+        File file = new File("20170304\\src\\javagame\\intersection\\Day1.java");
+        file = new File("20170304\\src\\javagame\\intersection\\test.java");
+        System.out.println(file.exists());
+        System.out.println(file.getParentFile().mkdirs());
+        try {
+            System.out.println(file.createNewFile());
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        if (file.exists()) {
+            try {
+                FileOutputStream fileOutputStream = new FileOutputStream(file);
+                String string = String.format("%n%s", "//hello FileOutputStream 你好qwerty");
+                fileOutputStream.write(string.getBytes());
+                System.out.println("写入成功");
+            } catch (Exception e) {
+                System.out.println(e);
+            }
+        }
+        
+//        FileInputStream fileInputStream = null;
+//        if (file.exists()) {
+//            try {
+//                fileInputStream = new FileInputStream(file);
+//                byte[] bufferByte = new byte[1024];
+////            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bufferByte);
+//                while (fileInputStream.read(bufferByte) > 0) {
+//                    System.out.print(new String(bufferByte));
+//                }
+//            } catch (IOException e) {
+//                System.out.println(e);
+//            } catch (Exception e) {
+//                System.out.println(e);
+//            } finally {
+//                try {
+//                    if (fileInputStream != null) {
+//                        fileInputStream.close();
+//                    }
+//                } catch (Exception e) {
+//                    System.out.println(e);
+//                }
+//            }
+//        }
+        
+//        File file = new File("d:\\a\\hello.txt");
+//        System.out.println(file.getParentFile().mkdirs());
+//        try {
+//            System.out.println(file.createNewFile());
+//        } catch (Exception e) {System.out.println(e);}
+//        new Scanner(System.in).next();
+//        ///233
+//        day1.delete(file.getParentFile());
+        
+//        File file =new File("asf");
+//
+//        int[] array = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+//        for (int j = 1; j < array.length; ++j) {
+//            for (int i = 0; i < array.length - j; ++i) {
+//                day1.swap(array, i, i + 1);
+//                System.out.println(Arrays.toString(array));
+//            }
+//        }
+//
+//        First first = new First();
+//        first.method();
+//        Second second = new Second();
+//        second.method();
         Third third = new Third();
         third.method();
         third.method();
@@ -17,21 +109,28 @@ public class Day1 {
          * 左手5斤 = 15 - 10 斤
          */
         third.exchange();
-        Fourth fourth = new Fourth();
-        fourth.firstMethod();
-        fourth.secondMethod();
-        fourth.thirdMethod();
-        fourth.fourthMethod();
-        fourth.fifthMethod();
-        fourth.sixthMethod();
-        fourth.seventhMethod();
-        fourth.eighth1Method();
-        fourth.eighth2Method();
-        fourth.nithMethod();
-        fourth.tenthMethod();
-        fourth.eleventhMethod();
-        fourth.twelfthMethod();
+//        Fourth fourth = new Fourth();
+//        fourth.firstMethod();
+//        fourth.secondMethod();
+//        fourth.thirdMethod();
+//        fourth.fourthMethod();
+//        fourth.fifthMethod();
+//        fourth.sixthMethod();
+//        fourth.seventhMethod();
+//        fourth.eighth1Method();
+//        fourth.eighth2Method();
+//        fourth.nithMethod();
+//        fourth.tenthMethod();
+//        fourth.eleventhMethod();
+//        fourth.twelfthMethod();
     }
+    
+    public void swap (int[] array, int i, int j) {
+        array[i] = array[i] + array[j];
+        array[j] = array[i] - array[j];
+        array[i] = array[i] - array[j];
+    }
+    
 
     //1第一题
     static class First {

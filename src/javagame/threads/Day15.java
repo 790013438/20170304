@@ -1,5 +1,14 @@
 package javagame.threads;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -217,20 +226,52 @@ public class Day15 {
     public static void main (String[] args) {
         Day15 day15 = new Day15();
         
-//        First first = day15.new First();
-//        first.method();
+        First first = day15.new First();
+        first.method();
         
-//        Second second = day15.new Second();
-//        second.method();
+        Second second = day15.new Second();
+        second.method();
         
-//        Third third = day15.new Third();
-//        third.method();
+        Third third = day15.new Third();
+        third.method();
         
-//        Fourth fourth = day15.new Fourth();
-//        fourth.method();
+        Fourth fourth = day15.new Fourth();
+        fourth.method();
         
         Fifth fifth = day15.new Fifth();
         fifth.method();
+        
+        //字符操作
+        System.out.println("qwerty".endsWith("qwerty"));
+        Character.toUpperCase('a');
+        
+//    文件
+        File file = new File("E:\\inst.exe");
+        System.out.println(Arrays.toString(file.listFiles()));
+    
+        try {
+        
+            FileInputStream fileInputStream = new FileInputStream(file);
+            BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
+    
+            FileReader fileReader = new FileReader(file);
+            BufferedReader bufferedReader = new BufferedReader(fileReader);
+//            System.out.println(fileReader.read());
+            
+            FileWriter fileWriter = new FileWriter(new File("E:\\cp.exe"));
+            int n;
+            while ((n = fileReader.read()) > 0) {
+                fileWriter.write(n);
+            }
+            fileWriter.close();
+        } catch (FileNotFoundException e) {
+            System.out.println(e);
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println(e);
+            System.out.println("qwerty");
+        } finally {
+        }
     }
     
 }
