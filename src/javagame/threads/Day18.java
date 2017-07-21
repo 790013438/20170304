@@ -11,7 +11,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Properties;
 
@@ -175,7 +177,24 @@ public class Day18 implements Serializable {
      */
     class Fourth {
         public void method () {
-            
+            File file = new File("f:\\張國榮 - 路過蜻蜓 (MTV).mp3");
+            try {
+                FileInputStream fileInputStream = new FileInputStream(file);
+                
+                int n;
+                String[] names = file.getAbsolutePath().split("\\.");
+                byte[] bytes = new byte[1024 * 1024];
+                int i = 0;
+                while ((n = fileInputStream.read(bytes)) > 0 ) {
+                    FileOutputStream fileOutputStream = new FileOutputStream(names[0] + "-" + i++ + "." + names[1]);
+                    System.out.println(n);
+                    //233
+                    fileOutputStream.write(bytes);
+                    fileOutputStream.flush();
+                }
+            } catch (Exception e) {
+                System.out.println(e);
+            }
         }
     }
  
@@ -194,8 +213,11 @@ public class Day18 implements Serializable {
 //        Second second = day18.new Second();
 //        second.method();
     
-        Third third = day18.new Third();
-        third.method();
+//        Third third = day18.new Third();
+//        third.method();
+        
+        Fourth fourth = day18.new Fourth();
+        fourth.method();
         
     }
     
