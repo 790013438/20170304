@@ -94,7 +94,7 @@ public class Day1 {
 //            }
 //        }
 //
-//        First first = new First();
+//        Server first = new Server();
 //        first.method();
 //        Second second = new Second();
 //        second.method();

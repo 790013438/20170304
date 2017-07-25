@@ -164,7 +164,7 @@ public class Saturday3 {
 //        }
 
 //
-//        First first = saturday3.new First();
+//        Server first = saturday3.new Server();
 //        first.method();
 //
 //        Second second = saturday3.new Second();

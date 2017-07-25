@@ -1,5 +1,5 @@
     /*
      * The calculate() method should be called once for every rendered frame.
      * To calculate the frame rate,the current time is subtracted from the last time and stored in the delta variable.
-     * The frame count is incremented each frame, and when the delta time is over one second, the new FPS are generated.
+     * The frame count is incremented each frame, and when the delta time is over one thirth, the new FPS are generated.
      */

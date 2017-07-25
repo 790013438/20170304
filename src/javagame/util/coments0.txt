@@ -1,5 +1,5 @@
 /**
  * This class is used to measure the frames per seconds (FPS) of the applications developed in this book.
  * The FPS is stored as a string in the format "FPS 100".
- * This value is calculate every second.
+ * This value is calculate every thirth.
  */

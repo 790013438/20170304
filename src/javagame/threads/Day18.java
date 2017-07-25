@@ -1,5 +1,6 @@
 package javagame.threads;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -11,16 +12,15 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.Scanner;
 
 /**
  * Created by 79001 on 2017/7/20.
  */
-public class Day18 implements Serializable {
+public class Day18 extends JFrame implements Serializable {
     /**
      * 1.自己定义一个Student类,里面有一些属性
      * 创建若干个Student对象,装入ArrayList
@@ -204,20 +204,142 @@ public class Day18 implements Serializable {
      * 知识点：IO流对象流、集合List
      */
     
+    /**
+     * Thread
+     */
+    class Sixth {
+        public void method () {
+            System.out.println(Thread.currentThread());
+        }
+    }
+    
+    /**
+     * yield
+     */
+    class Seventh implements Runnable {
+        private volatile boolean volatileBooleanRunnable;
+        private Thread thread;
+        
+        public void method () {
+            thread = new Thread(this);
+            thread.start();
+        }
+    
+        public Thread getThread() {
+            return thread;
+        }
+    
+        public void run () {
+            volatileBooleanRunnable = true;
+            Scanner scanner = new Scanner(System.in);
+            while (volatileBooleanRunnable) {
+                System.out.println("请输入");
+                String enterString = scanner.next();
+                if ("exit".equalsIgnoreCase(enterString)) {
+                    volatileBooleanRunnable = false;
+                    scanner.close();
+                }
+            }
+            
+        }
+    }
+    
+    /**
+     * Synchronized (this) {}
+     */
+    static class Eighth implements Runnable {
+        private volatile boolean volatileRunnableBoolean;
+        public static int i = 1000;
+        public void method () {
+            Thread thread = new Thread(this);
+            thread.setName("keyboard");
+            thread.start();
+            Thread thread2 = new Thread(this);
+            thread2.setName("qwerty");
+            thread2.start();
+        }
+        
+        public void run () {
+            volatileRunnableBoolean = true;
+            while (volatileRunnableBoolean) {
+                synchronized (this) {
+                    if (i > 0) {
+                        i -= 10;
+                        System.out.println(Thread.currentThread() + "出" + 10 + "剩余：" + i);
+                    } else {
+                        volatileRunnableBoolean = false;
+                        System.out.println("完");
+                    }
+                }
+            }
+        }
+    }
+    
+    class Ninth implements Runnable {
+        public void method () {
+            Thread thread1 = new Thread(this);
+            Thread thread2 = new Thread(this);
+            thread1.setName("first");
+            thread1.start();
+            thread2.start();
+        }
+        
+        @Override
+        public void run () {
+            if ("first".equals(Thread.currentThread().getName())) {
+                synchronized ("fork") {
+                    System.out.println("first wait knife");
+                    synchronized ("knife") {
+                        System.out.println("first complete");
+                    }
+                }
+            } else {
+                synchronized ("knife") {
+                    System.out.println("second wait fork");
+                    synchronized ("fork") {
+                        System.out.println("second complete");
+                    }
+                }
+            }
+        }
+    }
+    
     public static void main (String[] args) {
         Day18 day18 = new Day18();
         
-//        First first = day18.new First();
+//        Server first = day18.new Server();
 //        first.method();
-        
+
 //        Second second = day18.new Second();
 //        second.method();
-    
+
 //        Third third = day18.new Third();
 //        third.method();
+
+//        Fourth fourth = day18.new Fourth();
+//        fourth.method();
+
+//        Sixth sixth = day18.new Sixth();
+//        sixth.method();
         
-        Fourth fourth = day18.new Fourth();
-        fourth.method();
+//        Seventh seventh = day18.new Seventh();
+//        seventh.method();
+//        try {
+//            seventh.getThread().wait();
+//        } catch (Exception e) {
+//            System.out.println();
+//        }
+//        try {
+//            seventh.getThread().join();
+//        } catch (Exception e) {
+//            System.out.println(e);
+//        }
+        
+//        Eighth eighth = new Eighth();
+//        eighth.method();
+        
+        Ninth ninth = day18.new Ninth();
+        ninth.method();
         
     }
     

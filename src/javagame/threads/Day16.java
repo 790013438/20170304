@@ -224,7 +224,7 @@ public class Day16 {
     public static void main (String[] args) {
         Day16 day16 = new Day16();
         
-//        First first = day16.new First();
+//        Server first = day16.new Server();
 //        first.method();
         
 //        Second second = day16.new Second();

@@ -703,7 +703,7 @@ public class Day12 {
          * （3）创建一个Collection集合的对象，将Person对象添加到Collection集合中。
          * (5) 删除重复的对象。如果姓名和年龄都相同则认为对象重复了
          */
-//        First first = day12.new First();
+//        Server first = day12.new Server();
 //        first.method();
         
         Sixth sixth = day12.new Sixth();

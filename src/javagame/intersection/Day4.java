@@ -7,7 +7,7 @@ import javax.swing.SwingUtilities;
 
 public class Day4 {
     public static void main(String[] args) {
-//        First first = new First();
+//        Server first = new Server();
 //        first.method();
 //        Second second = new Second();
 //        second.method();

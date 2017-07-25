@@ -227,7 +227,7 @@ public class Day17_2 implements Serializable {
     public static void main (String[] args) {
         Day17_2 day17 = new Day17_2();
         
-//        First first = day17.new First();
+//        Server first = day17.new Server();
 //        first.method();
     
 //       Fourth fourth = day17.new Fourth();

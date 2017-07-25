@@ -433,7 +433,7 @@ public class Day13Map {
             e.printStackTrace();
         }
         
-//        First first = day13Map.new First();
+//        Server first = day13Map.new Server();
 //        first.method();
 //
 //        Second second = day13Map.new Second();

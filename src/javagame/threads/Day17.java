@@ -246,7 +246,7 @@ public class Day17 {
     public static void main (String[] args) {
         Day17 day17 = new Day17();
         
-//        First first = day17.new First();
+//        Server first = day17.new Server();
 //        first.method();
         
 //        Second second = day17.new Second();
