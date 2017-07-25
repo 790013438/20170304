@@ -30,6 +30,15 @@ public class FrameRate {
     }
 
     /**
+     * The calculate() method should be called once for every rendered frame.
+     * To calcluatte the frame rate, the current time is subtracted from the last time and 
+     * stored in the delta variable.
+     * The frame count is incremented each frame,
+     * and when the delta time is over one second,
+     * the new FPS are generated.
+     * Since the delta variable is rarely exactly one second,
+     * 1000 milliseconds are subtracted from the delta variable to
+     * save the extra milliseconds. 
      */
     public void calculate() {
         long currentLong = System.currentTimeMillis();
