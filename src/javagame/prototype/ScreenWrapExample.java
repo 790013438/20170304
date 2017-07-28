@@ -1,9 +1,13 @@
 package javagame.prototype;
 
+import javagame.util.SimpleFramework;
+
+import java.awt.*;
+
 /**
  * Created by 79001 on 2017/7/23.
  */
-public class ScreenWrapExample {
+public class ScreenWrapExample extends SimpleFramework {
     /**
      * The ScreenWrapExample, as shown in Figure 8.7 and located in the javagames.prototype package,
      * uses the PolygonWrapper class to wrap a square that is moved around the screen.
@@ -14,13 +18,13 @@ public class ScreenWrapExample {
      * The wrapper variable is the PolygonWrapper shown previously.
      */
     public ScreenWrapExample () {
-//        appBorderScale = 0.9f;
-//        appWidth = 640;
-//        appHeight = 640;
-//        appMaintainaRation = true;
-//        appTitile = "Screen Wrap Example";
-//        appBackground = Color.WHITE;
-//        appFPSColor = Color.BLACK:
+        appBorderScale = 0.9f;
+        appWidth = 640;
+        appHeight = 640;
+        appMaintainRatio = true;
+        appTitle = "Screen Wrap Example";
+        appBackground = Color.WHITE;
+        appFPSColor = Color.BLACK;
         //233
     }
 
@@ -49,5 +53,9 @@ public class ScreenWrapExample {
     /**
      * The render() method draws all the objects in the render list to the screen.
      */
+    
+    public static void main (String[] args) {
+        launchApp(new ScreenWrapExample());
+    }
 
 }

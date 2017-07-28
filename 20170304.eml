@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component inherit-compiler-output="true" inheritJdk="true">
+	<output-test url="file://$MODULE_DIR$/../out/test/20170304"/>
+	<exclude-output/>
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<lib name="" scope="COMPILE">
+		<relative-module-cls project-related="file://$PROJECT_DIR$/20170304"/>
+	</lib>
+	<levels>
+		<level name="20170304" value="project"/>
+		<level name="20160810" value="project"/>
+		<level name="dom4j-2.0.1" value="project"/>
+		<level name="commons-codec-1.9" value="project"/>
+		<level name="commons-logging-1.2" value="project"/>
+	</levels>
+</component>

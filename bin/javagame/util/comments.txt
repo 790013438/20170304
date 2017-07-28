@@ -1,4 +1,0 @@
-    /*
-     *The initialize() method needs to be called before the frame rate measurements begin.
-     * This method initializes the frame rate string to 0, and the last time to the current time in milliseconds.
-     */

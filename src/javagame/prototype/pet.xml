@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<root>
+    <pet serial = "1">
+        <snake>
+            <name>Japan</name>
+            <future>short</future>
+            <owner>
+                <name>USA</name>
+                <future>dictator</future>
+            </owner>
+        </snake>
+    </pet>
+    <pet serial = "2">
+        <cat>
+            <name>qwerty</name>
+        </cat>
+    </pet>
+</root>

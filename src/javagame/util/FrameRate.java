@@ -39,11 +39,13 @@ public class FrameRate {
      * Since the delta variable is rarely exactly one second,
      * 1000 milliseconds are subtracted from the delta variable to
      * save the extra milliseconds. 
+     * Once the frame rate is saved, the frame count is reset and 
+     * the process begins again.
      */
     public void calculate() {
-        long currentLong = System.currentTimeMillis();
-        deltaLong += currentLong - lastTimeLong;
-        lastTimeLong = currentLong;
+        long currentTimeLong = System.currentTimeMillis();
+        deltaLong += currentTimeLong - lastTimeLong;
+        lastTimeLong = currentTimeLong;
         frameCountInt++;
         if (deltaLong > 1000) {
             deltaLong -= 1000;
