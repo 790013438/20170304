@@ -7,7 +7,7 @@ import java.util.ArrayList;
 /**
  * Created by 79001 on 2017/7/28.
  */
-public class stringOperation {
+public class StringOperation {
     /**
      * 题目二：String操作完成（共8分）
      文本文件中存储多个文章标题、作者，标题和作者之间用若干个空格（数量不定）隔开，每行一个，标题有长有短，输出到控制台的时候最多标题长度为10，若超过10则只截取前半部分并在最后添加“...”，加上竖线后输出作者名字。

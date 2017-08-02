@@ -356,11 +356,22 @@ public class Day22 {
             }
         }
     }
+    
+    class SwitchMethod {
+        public void method () {
+            int i = 10;
+            int j = 20;
+            if (i++ < j-- || i-- > j++) {
+                System.out.println(i + " " + j);
+            }
+        }
+    }
 
     public static void main (String[] args) {
         Day22 day22 = new Day22();
 
-        Fourth fourth = day22.new Fourth();
-        fourth.method2();
+        SwitchMethod switchMethod = day22.new SwitchMethod();
+        switchMethod.method();
+        Math.max(3, 6);
     }
 }
