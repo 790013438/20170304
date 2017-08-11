@@ -366,12 +366,25 @@ public class Day22 {
             }
         }
     }
+    
+    static void hanoi (int first, int second, int third, int n) {
+        if (n == 1) {
+            move(first, third);
+        } else {
+            hanoi(first, third, second, n - 1);
+            move(first, third);
+            hanoi(second, first, third, n - 1);
+        }
+    }
+    
+    static void move(int a, int b) {
+        System.out.println(a + "-->" + b);
+    }
 
     public static void main (String[] args) {
         Day22 day22 = new Day22();
 
-        SwitchMethod switchMethod = day22.new SwitchMethod();
-        switchMethod.method();
-        Math.max(3, 6);
+      hanoi(1, 2, 3, 3);
+    
     }
 }

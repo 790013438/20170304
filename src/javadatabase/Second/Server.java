@@ -1,4 +1,4 @@
-package Day20.Second;
+package javadatabase.Second;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
